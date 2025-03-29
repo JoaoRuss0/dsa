@@ -1,8 +1,6 @@
-use std::ptr::read;
-
 pub fn run() {
 
-    println!("Problem 3");
+    println!("Problem 3 - Unformatted Readings");
 
     let input = std::fs::read_to_string("input/codyssi/sample_2024/problem3.txt")
         .unwrap();

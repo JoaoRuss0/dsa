@@ -1,6 +1,6 @@
 pub fn run() {
 
-    println!("Problem 2");
+    println!("Problem 2 - Sensors and Circuits");
 
     let input = std::fs::read_to_string("input/codyssi/sample_2024/problem2.txt")
         .unwrap();
