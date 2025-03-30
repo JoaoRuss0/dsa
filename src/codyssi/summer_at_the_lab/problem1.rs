@@ -1,8 +1,8 @@
 pub fn run() {
 
-    println!("Problem 1 - Handling the Budget");
+    println!("  ├─ Problem 1 - Handling the Budget");
 
-    let input = std::fs::read_to_string("input/codyssi/sample_2024/problem1.txt")
+    let input = std::fs::read_to_string("input/codyssi/summer_at_the_lab/problem1.txt")
         .unwrap();
 
     let mut prices = input.lines()
@@ -21,7 +21,7 @@ pub fn run() {
 
     prices.sort_by(|a, b| b.cmp(a));
 
-    println!("- Part 1: {}", prices.iter().sum::<u32>());
-    println!("- Part 2: {}", prices.iter().skip(20).sum::<u32>());
-    println!("- Part 3: {}", discount);
+    println!("  │  ├─ Part 1: {}", prices.iter().sum::<u32>());
+    println!("  │  ├─ Part 2: {}", prices.iter().skip(20).sum::<u32>());
+    println!("  │  └─ Part 3: {}", discount);
 }

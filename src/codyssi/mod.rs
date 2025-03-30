@@ -1,1 +1,2 @@
-pub mod sample_2024;
+pub mod summer_at_the_lab;
+pub mod journey_to_atlantis;

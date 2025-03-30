@@ -2,9 +2,9 @@ use std::collections::{HashMap, HashSet, VecDeque};
 
 pub fn run() {
 
-    println!("Problem 4 - Traversing the Country");
+    println!("  └─ Problem 4 - Traversing the Country");
 
-    let input = std::fs::read_to_string("input/codyssi/sample_2024/problem4.txt")
+    let input = std::fs::read_to_string("input/codyssi/summer_at_the_lab/problem4.txt")
         .unwrap();
 
     let mut locations : HashMap<&str, HashSet<&str>> = HashMap::new();
@@ -15,7 +15,7 @@ pub fn run() {
             locations.entry(l2).or_insert(HashSet::new()).insert(l1);
         });
 
-    println!("- Part 1: {}", locations.len());
+    println!("     ├─ Part 1: {}", locations.len());
 
     let mut visited = HashSet::new();
     let mut queue : VecDeque<(u8, &str)> = VecDeque::new();
@@ -32,7 +32,7 @@ pub fn run() {
 
     }
 
-    println!("- Part 2: {}", visited.len());
+    println!("     ├─ Part 2: {}", visited.len());
 
     let mut seen = HashSet::new();
     let mut queue : VecDeque<(u8, &str)> = VecDeque::new();
@@ -51,5 +51,5 @@ pub fn run() {
         }
     }
 
-    println!("- Part 3: {}", time);
+    println!("     └─ Part 3: {}", time);
 }
