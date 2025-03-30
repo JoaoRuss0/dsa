@@ -11,4 +11,5 @@ fn main() {
     println!("\nJourney to Atlantis");
     codyssi::journey_to_atlantis::problem1::run();
     codyssi::journey_to_atlantis::problem2::run();
+    codyssi::journey_to_atlantis::problem3::run();
 }
