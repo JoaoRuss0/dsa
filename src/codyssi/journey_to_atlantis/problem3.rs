@@ -1,5 +1,4 @@
 use std::collections::HashSet;
-use std::hash::Hash;
 
 pub fn run() {
     println!("  ├─ Problem 3 - Supplies in Surplus");
