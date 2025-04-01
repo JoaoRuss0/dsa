@@ -14,8 +14,8 @@ pub fn run() {
     
     let value = |&c : &char| -> u64 {
         match c {
-            'a'..='z' => ((c as u8) - ('a' as u8) + 1) as u64,
-            'A'..='Z' => ((c as u8) - ('A' as u8) + 27) as u64,
+            'a'..='z' => ((c as u8) - b'a' + 1) as u64,
+            'A'..='Z' => ((c as u8) - b'A' + 27) as u64,
             _ => 0
         }
     };
@@ -35,10 +35,9 @@ pub fn run() {
         }
     };
 
-    let mut chars = line.chars();
-    let first = value(&chars.next().unwrap());
-    let mut original_value = first;
-    let mut previous_value = first;
+    let chars = line.chars();
+    let mut original_value = 0;
+    let mut previous_value = 0;
     
     for c in chars {
         
@@ -49,7 +48,6 @@ pub fn run() {
             };
         original_value += new_value;
         previous_value = new_value;
-        
     }
     
     println!("  │  └─ Part 3: {}", original_value);

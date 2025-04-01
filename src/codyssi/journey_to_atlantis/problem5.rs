@@ -1,6 +1,4 @@
 use std::collections::HashMap;
-use std::hash::Hash;
-use std::os::unix::raw::gid_t;
 
 pub fn run() {
     println!("  ├─ Problem 5 - Patron Islands");
@@ -15,7 +13,7 @@ pub fn run() {
     let points = input.lines()
         .map(|l| l.split_once(", ").unwrap())
         .map(|(x, y)| 
-            ((&x[1..]).parse::<i64>().unwrap(),(&y[0..y.len()-1]).parse::<i64>().unwrap()))
+            (x[1..].parse::<i64>().unwrap(),y[0..y.len()-1].parse::<i64>().unwrap()))
         .collect::<Vec<(i64, i64)>>();
 
     let distances = |p: (i64, i64), points: Vec<(i64, i64)>| -> HashMap<(i64, i64), i64> {
@@ -29,7 +27,7 @@ pub fn run() {
     
     let (&p_c, &d_c) = distances_boat.iter()
         .min_by(|&a, &b| a.1.cmp(b.1)).unwrap();
-    let (&p_f, &d_f) = distances_boat.iter()
+    let (_, &d_f) = distances_boat.iter()
         .max_by(|&a, &b| a.1.cmp(b.1)).unwrap();
     
     println!("  │  ├─ Part 1: {}", (d_c - d_f).abs());
@@ -37,8 +35,7 @@ pub fn run() {
     let closest = |point: (i64, i64), points: &Vec<(i64, i64)>| -> ((i64, i64), i64) {
 
         let points_but_closest : Vec<(i64, i64)> = points.iter()
-            .filter(|&p| !p.eq(&point))
-            .map(|p| *p)
+            .filter(|&p| !p.eq(&point)).copied()
             .collect();
 
         let distances_closest = distances(point, points_but_closest);

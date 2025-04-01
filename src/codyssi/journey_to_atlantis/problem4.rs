@@ -6,8 +6,8 @@ pub fn run() {
 
     let get_char_size = |c : char| -> u64 {
         match c {
-            'A'..='Z' => ((c as u8 - ('A' as u8)) + 1) as u64,
-            '0'..='9' => (c as u8 - ('0' as u8)) as u64,
+            'A'..='Z' => ((c as u8 - b'A') + 1) as u64,
+            '0'..='9' => (c as u8 - b'0') as u64,
             _ => panic!("Character not supported")
         }
     };
@@ -29,7 +29,7 @@ pub fn run() {
         let mut compressed = String::new();
         
         (0..kept).for_each(|i| compressed.push(chars.clone().nth(i).unwrap()));
-        compressed.extend((length - kept * 2).to_string().chars());
+        compressed.push_str(&(length - kept * 2).to_string());
         (length - kept..length).for_each(|i| compressed.push(chars.clone().nth(i).unwrap()));
         
         compressed
@@ -44,7 +44,7 @@ pub fn run() {
         
         let mut compressed = String::new();
 
-        let mut c = message.chars().nth(0).unwrap();
+        let mut c = message.chars().next().unwrap();
         let mut count = 1;
         let mut i = 1;
         while i < message.len() {

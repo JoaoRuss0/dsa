@@ -11,8 +11,8 @@ pub fn run() {
     input.lines()
         .map(|line| line.split_once(" <-> ").unwrap())
         .for_each(|(l1, l2)| {
-            locations.entry(l1).or_insert(HashSet::new()).insert(l2);
-            locations.entry(l2).or_insert(HashSet::new()).insert(l1);
+            locations.entry(l1).or_default().insert(l2);
+            locations.entry(l2).or_default().insert(l1);
         });
 
     println!("     ├─ Part 1: {}", locations.len());
