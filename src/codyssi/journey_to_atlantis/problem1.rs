@@ -1,14 +1,10 @@
 pub fn run() {
     println!("  ├─ Problem 1 - Compass Calibration");
 
-    let input = std::fs::read_to_string("input/codyssi/journey_to_atlantis/problem1.txt")
-        .unwrap();
+    let input = std::fs::read_to_string("input/codyssi/journey_to_atlantis/problem1.txt").unwrap();
 
     let lines = input.lines().collect::<Vec<&str>>();
-    let offset = lines.first()
-        .unwrap()
-        .parse::<i64>()
-        .unwrap();
+    let offset = lines.first().unwrap().parse::<i64>().unwrap();
 
     let operations = lines.last().unwrap();
 
@@ -22,8 +18,8 @@ pub fn run() {
 
     let mut corrected_rev = offset;
     for i in (0..=operations.len() - 1).rev() {
-        let correction = operations.chars().nth(i).unwrap().to_string()
-            + lines[operations.len() - i];
+        let correction =
+            operations.chars().nth(i).unwrap().to_string() + lines[operations.len() - i];
         corrected_rev += correction.parse::<i64>().unwrap();
     }
 
@@ -31,10 +27,14 @@ pub fn run() {
 
     let mut corrected_rev_two_digit = (lines[0].to_string() + lines[1]).parse::<i64>().unwrap();
 
-    for i in 1..=operations.len()/2 {
-        let correction = operations.chars().nth(operations.len() - i).unwrap().to_string() +
-            lines[i * 2] +
-            lines[i * 2 + 1];
+    for i in 1..=operations.len() / 2 {
+        let correction = operations
+            .chars()
+            .nth(operations.len() - i)
+            .unwrap()
+            .to_string()
+            + lines[i * 2]
+            + lines[i * 2 + 1];
         corrected_rev_two_digit += correction.parse::<i64>().unwrap();
     }
 

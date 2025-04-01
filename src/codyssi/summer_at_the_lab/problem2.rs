@@ -1,15 +1,15 @@
 pub fn run() {
-
     println!("  ├─ Problem 2 - Sensors and Circuits");
 
-    let input = std::fs::read_to_string("input/codyssi/summer_at_the_lab/problem2.txt")
-        .unwrap();
-    
-    let sensors = input.lines()
+    let input = std::fs::read_to_string("input/codyssi/summer_at_the_lab/problem2.txt").unwrap();
+
+    let sensors = input
+        .lines()
         .map(|line| line == "TRUE")
         .collect::<Vec<bool>>();
 
-    let true_sensor_ids_sum = sensors.iter()
+    let true_sensor_ids_sum = sensors
+        .iter()
         .filter(|&s| *s)
         .enumerate()
         .map(|(i, _)| i + 1)
@@ -18,9 +18,9 @@ pub fn run() {
     println!("  │  ├─ Part 1: {}", true_sensor_ids_sum);
 
     let get_gate_output = |(i, inputs): (usize, &[bool])| -> bool {
-        match i % 2 == 0{
+        match i % 2 == 0 {
             true => inputs[0] && inputs[1],
-            false =>  inputs[0] || inputs[1]
+            false => inputs[0] || inputs[1],
         }
     };
 
@@ -37,18 +37,19 @@ pub fn run() {
     let mut layer = sensors.clone();
 
     while layer.len() != 1 {
-
-        let next_layer = layer.chunks(2)
+        let next_layer = layer
+            .chunks(2)
             .enumerate()
             .map(get_gate_output)
             .collect::<Vec<bool>>();
 
-        true_gate_output_layer_count += next_layer.iter()
-            .filter(|&i| *i )
-            .count();
+        true_gate_output_layer_count += next_layer.iter().filter(|&i| *i).count();
 
         layer = next_layer;
     }
 
-    println!("  │  └─ Part 3: {}", true_gate_output_layer_count + input.lines().filter(|line| *line == "TRUE").count());
+    println!(
+        "  │  └─ Part 3: {}",
+        true_gate_output_layer_count + input.lines().filter(|line| *line == "TRUE").count()
+    );
 }

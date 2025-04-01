@@ -1,21 +1,19 @@
 pub fn run() {
-
     println!("  ├─ Problem 1 - Handling the Budget");
 
-    let input = std::fs::read_to_string("input/codyssi/summer_at_the_lab/problem1.txt")
-        .unwrap();
+    let input = std::fs::read_to_string("input/codyssi/summer_at_the_lab/problem1.txt").unwrap();
 
-    let mut prices = input.lines()
+    let mut prices = input
+        .lines()
         .map(|line| line.parse::<u32>().unwrap())
         .collect::<Vec<u32>>();
 
-    let discount = prices.iter()
+    let discount = prices
+        .iter()
         .enumerate()
-        .map(|(i, a)| {
-            match i % 2 == 0 {
-                true => *a as i64,
-                false => -(*a as i64),
-            }
+        .map(|(i, a)| match i % 2 == 0 {
+            true => *a as i64,
+            false => -(*a as i64),
         })
         .sum::<i64>();
 

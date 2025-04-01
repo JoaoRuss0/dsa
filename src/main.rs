@@ -1,7 +1,6 @@
 mod codyssi;
 
 fn main() {
-
     println!("Summer at the Lab");
     codyssi::summer_at_the_lab::problem1::run();
     codyssi::summer_at_the_lab::problem2::run();
