@@ -46,17 +46,6 @@ pub fn run() {
 
     println!("  │  ├─ Part 2: {}", standard_2[index]);
 
-    let block_len = |start: usize, len: usize, tracks: &Vec<u64>| -> usize {
-        let mut length = 1;
-        for i in start + 1..tracks.len() {
-            if tracks[i] < tracks[i - 1] || i >= start + len {
-                break;
-            }
-            length += 1;
-        }
-        length
-    };
-
     let mut highest = tracks.clone();
     swaps.iter().for_each(|&(l, r)| {
         let biggest_x = l.max(r);
