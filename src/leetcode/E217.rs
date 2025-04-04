@@ -14,11 +14,11 @@ mod tests {
 
     #[test]
     fn test1() {
-        assert_eq!(true, Solution::contains_duplicate(vec![1, 2, 3, 1]));
+        assert!(Solution::contains_duplicate(vec![1, 2, 3, 1]));
     }
 
     #[test]
     fn test2() {
-        assert_eq!(false, Solution::contains_duplicate(vec![1, 2, 3, 4]));
+        assert!(!Solution::contains_duplicate(vec![1, 2, 3, 4]));
     }
 }
