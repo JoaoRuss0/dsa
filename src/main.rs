@@ -16,4 +16,5 @@ fn main() {
     codyssi::journey_to_atlantis::problem6::run();
     codyssi::journey_to_atlantis::problem7::run();
     codyssi::journey_to_atlantis::problem8::run();
+    codyssi::journey_to_atlantis::problem9::run();
 }
