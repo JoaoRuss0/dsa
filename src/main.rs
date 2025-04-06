@@ -1,4 +1,6 @@
 mod codyssi;
 mod leetcode;
 
-fn main() {}
+fn main() {
+    codyssi::run::execute();
+}

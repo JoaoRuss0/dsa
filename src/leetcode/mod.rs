@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 pub mod E1;
 pub mod E121;
 pub mod E125;
