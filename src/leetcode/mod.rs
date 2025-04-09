@@ -10,6 +10,7 @@ pub mod M128;
 pub mod M15;
 pub mod M153;
 pub mod M238;
+pub mod M3;
 pub mod M33;
 pub mod M347;
 pub mod M49;
