@@ -1,16 +1,26 @@
-use std::collections::HashMap;
-
 struct Solution;
 
 impl Solution {
     pub fn majority_element(nums: Vec<i32>) -> i32 {
-        let mut map: HashMap<i32, i32> = HashMap::new();
+        let mut count = 0;
+        let mut candidate = 0;
 
         for num in nums {
-            *map.entry(num).or_default() += 1;
+            if num == candidate {
+                count += 1;
+                continue;
+            }
+
+            if count == 0 {
+                candidate = num;
+                count = 1;
+                continue;
+            }
+
+            count -= 1;
         }
 
-        map.into_iter().max_by(|a, b| a.1.cmp(&b.1)).unwrap().0
+        candidate
     }
 }
 
