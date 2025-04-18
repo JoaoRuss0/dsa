@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 pub mod Problem1;
 pub mod Problem2;
 pub mod Problem3;
