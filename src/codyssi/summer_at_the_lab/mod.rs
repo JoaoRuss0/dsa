@@ -1,4 +1,4 @@
-pub mod problem1;
-pub mod problem2;
-pub mod problem3;
-pub mod problem4;
+pub mod Problem1;
+pub mod Problem2;
+pub mod Problem3;
+pub mod Problem4;
