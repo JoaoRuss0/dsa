@@ -1,5 +1,3 @@
-use std::convert::TryInto;
-
 pub fn run() {
     println!("  ├─ Problem 11 - Games in a Storm");
 
@@ -30,7 +28,7 @@ pub fn find_smallest_4_digit_base(number: u64) -> u64 {
     loop {
         let mut divided = number;
 
-        (0..4).for_each(|i| {
+        (0..4).for_each(|_| {
             divided /= base;
         });
 
