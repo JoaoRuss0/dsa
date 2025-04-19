@@ -33,20 +33,30 @@ pub fn run() {
     }
 
     println!("  │  ├─ Part 1: {}", safest);
+    println!(
+        "  │  ├─ Part 2: {}",
+        find_safest_path(&grid, (0, 0), (14, 14))
+    );
+    println!(
+        "  │  └─ Part 3: {}",
+        find_safest_path(&grid, (0, 0), (grid.len() - 1, grid[0].len() - 1))
+    );
+}
 
+fn find_safest_path(grid: &[Vec<i64>], start: (usize, usize), end: (usize, usize)) -> i64 {
     let mut queue: BinaryHeap<Path> = BinaryHeap::new();
     let mut visited: HashSet<(usize, usize)> = HashSet::new();
     let mut goal = 0;
 
     queue.push(Path {
-        danger: grid[0][0],
-        position: (0, 0),
+        danger: grid[start.0][start.1],
+        position: (start.0, start.1),
     });
 
     while !queue.is_empty() {
         let p = queue.pop().unwrap();
         let (x, y) = p.position;
-        if x == 14 && y == 14 {
+        if x == end.0 && y == end.1 {
             goal = p.danger;
             break;
         }
@@ -55,14 +65,14 @@ pub fn run() {
             continue;
         }
 
-        if p.position.0 + 1 < 15 {
+        if p.position.0 < end.0 {
             queue.push(Path {
                 danger: p.danger + grid[x + 1][y],
                 position: (x + 1, y),
             });
         }
 
-        if p.position.1 + 1 < 15 {
+        if p.position.1 < end.1 {
             queue.push(Path {
                 danger: p.danger + grid[x][y + 1],
                 position: (x, y + 1),
@@ -70,8 +80,7 @@ pub fn run() {
         }
     }
 
-    println!("  │  ├─ Part 2: {}", goal);
-    //println!("  │  └─ Part 3: {}", );
+    goal
 }
 
 #[derive(Eq, PartialEq, Hash, Clone)]
