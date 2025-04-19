@@ -101,13 +101,3 @@ impl PartialOrd for Path {
         Some(self.cmp(other))
     }
 }
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn given_when_then() {
-        assert_eq!("a", "a");
-    }
-}

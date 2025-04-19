@@ -68,13 +68,3 @@ pub fn convert_from_custom_base(number: &str, base: u64) -> u64 {
 
     r
 }
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn given_when_then() {
-        assert_eq!("a", "a");
-    }
-}
