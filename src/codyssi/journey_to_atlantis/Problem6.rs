@@ -1,7 +1,8 @@
 pub fn run() {
     println!("  ├─ Problem 6 - Lotus Scramble");
 
-    let input = std::fs::read_to_string("input/codyssi/journey_to_atlantis/problem6.txt").unwrap();
+    let path = "input/codyssi/journey_to_atlantis/problem6.txt";
+    let input = std::fs::read_to_string(path).unwrap();
 
     let line = input.lines().next().unwrap();
 

@@ -1,7 +1,8 @@
 pub fn run() {
     println!("  ├─ Problem 1 - Compass Calibration");
 
-    let input = std::fs::read_to_string("input/codyssi/journey_to_atlantis/problem1.txt").unwrap();
+    let path = "input/codyssi/journey_to_atlantis/problem1.txt";
+    let input = std::fs::read_to_string(path).unwrap();
 
     let lines = input.lines().collect::<Vec<&str>>();
     let offset = lines.first().unwrap().parse::<i64>().unwrap();

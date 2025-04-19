@@ -1,7 +1,8 @@
 pub fn run() {
     println!("  ├─ Problem 3 - Unformatted Readings");
 
-    let input = std::fs::read_to_string("input/codyssi/summer_at_the_lab/problem3.txt").unwrap();
+    let path = "input/codyssi/summer_at_the_lab/problem3.txt";
+    let input = std::fs::read_to_string(path).unwrap();
 
     let base_sum: usize = input
         .lines()

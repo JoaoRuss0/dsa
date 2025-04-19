@@ -3,7 +3,8 @@ use std::collections::HashMap;
 pub fn run() {
     println!("  ├─ Problem 5 - Patron Islands");
 
-    let input = std::fs::read_to_string("input/codyssi/journey_to_atlantis/problem5.txt").unwrap();
+    let path = "input/codyssi/journey_to_atlantis/problem5.txt";
+    let input = std::fs::read_to_string(path).unwrap();
 
     let distance =
         |p1: (i64, i64), p2: (i64, i64)| -> i64 { (p1.0 - p2.0).abs() + (p1.1 - p2.1).abs() };
