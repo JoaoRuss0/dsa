@@ -18,4 +18,6 @@ pub fn execute() {
     codyssi::journey_to_atlantis::Problem8::run();
     codyssi::journey_to_atlantis::Problem9::run();
     codyssi::journey_to_atlantis::Problem10::run();
+    codyssi::journey_to_atlantis::Problem10::run();
+    codyssi::journey_to_atlantis::Problem11::run();
 }
