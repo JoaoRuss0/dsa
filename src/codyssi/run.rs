@@ -20,4 +20,5 @@ pub fn execute() {
     codyssi::journey_to_atlantis::Problem10::run();
     codyssi::journey_to_atlantis::Problem10::run();
     codyssi::journey_to_atlantis::Problem11::run();
+    codyssi::journey_to_atlantis::Problem12::run();
 }
