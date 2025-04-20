@@ -21,6 +21,7 @@ pub fn run() {
 
     let flow_control = sections[2]
         .lines()
+        .filter(|line| !line.eq(&"TAKE"))
         .map(FlowControlInstruction::of)
         .collect::<Vec<FlowControlInstruction>>();
 
@@ -30,14 +31,20 @@ pub fn run() {
     println!("  │  ├─ Part 1: {}", get_largest_sum(&applied));
 
     let mut controlled = instructions.clone();
-    perform_flow_control(&flow_control, &mut controlled);
     applied = grid.clone();
-    apply_instructions(&mut applied, &controlled);
+    perform_flow_control(&flow_control, &mut controlled, &mut applied);
     println!("  │  ├─ Part 2: {}", get_largest_sum(&applied));
-    //println!("  │  └─ Part 3: {}", );
+
+    let mut controlled = instructions.clone();
+    applied = grid.clone();
+
+    while !controlled.is_empty() {
+        perform_flow_control(&flow_control, &mut controlled, &mut applied);
+    }
+    println!("  │  └─ Part 3: {}", get_largest_sum(&applied));
 }
 
-fn get_largest_sum(applied: &Vec<Vec<i64>>) -> i64 {
+fn get_largest_sum(applied: &[Vec<i64>]) -> i64 {
     let mut largest = 0;
     for i in 0..applied.len() {
         let col: i64 = applied[i].iter().sum();
@@ -50,24 +57,22 @@ fn get_largest_sum(applied: &Vec<Vec<i64>>) -> i64 {
 fn perform_flow_control(
     flow_control: &Vec<FlowControlInstruction>,
     instructions: &mut Vec<Instruction>,
+    grid: &mut [Vec<i64>],
 ) {
-    let mut acts = 0;
-    let mut i = -1;
-
     for fci in flow_control {
-        match fci {
-            FlowControlInstruction::Take => i += 1,
-            FlowControlInstruction::Cycle => {
-                let instruction = instructions.remove(i as usize);
-                instructions.push(instruction);
-                i -= 1;
-            }
-            FlowControlInstruction::Act => acts += 1,
+        if instructions.is_empty() {
+            return;
         }
-    }
 
-    for i in 0..instructions.len() - acts {
-        instructions.pop();
+        let instruction = instructions.remove(0);
+        match fci {
+            FlowControlInstruction::Cycle => {
+                instructions.push(instruction);
+            }
+            FlowControlInstruction::Act => {
+                apply_instructions(grid, &vec![instruction]);
+            }
+        }
     }
 }
 
@@ -227,7 +232,6 @@ impl Instruction {
 }
 
 enum FlowControlInstruction {
-    Take,
     Cycle,
     Act,
 }
@@ -235,7 +239,6 @@ enum FlowControlInstruction {
 impl FlowControlInstruction {
     pub fn of(string: &str) -> Self {
         match string {
-            "TAKE" => FlowControlInstruction::Take,
             "CYCLE" => FlowControlInstruction::Cycle,
             "ACT" => FlowControlInstruction::Act,
             _ => panic!("Unknown flow control: {}", string),
