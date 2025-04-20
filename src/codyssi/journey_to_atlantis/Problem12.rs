@@ -21,23 +21,54 @@ pub fn run() {
 
     let flow_control = sections[2]
         .lines()
-        .map(FlowControl::of)
-        .collect::<Vec<FlowControl>>();
+        .map(FlowControlInstruction::of)
+        .collect::<Vec<FlowControlInstruction>>();
 
     let mut applied = grid.clone();
     apply_instructions(&mut applied, &instructions);
 
+    println!("  │  ├─ Part 1: {}", get_largest_sum(&applied));
+
+    let mut controlled = instructions.clone();
+    perform_flow_control(&flow_control, &mut controlled);
+    applied = grid.clone();
+    apply_instructions(&mut applied, &controlled);
+    println!("  │  ├─ Part 2: {}", get_largest_sum(&applied));
+    //println!("  │  └─ Part 3: {}", );
+}
+
+fn get_largest_sum(applied: &Vec<Vec<i64>>) -> i64 {
     let mut largest = 0;
     for i in 0..applied.len() {
         let col: i64 = applied[i].iter().sum();
         let row: i64 = applied.iter().map(|r| r[i]).sum();
         largest = row.max(col.max(largest));
     }
+    largest
+}
 
-    println!("  │  ├─ Part 1: {}", largest);
+fn perform_flow_control(
+    flow_control: &Vec<FlowControlInstruction>,
+    instructions: &mut Vec<Instruction>,
+) {
+    let mut acts = 0;
+    let mut i = -1;
 
-    println!("  │  ├─ Part 2: {}",);
-    //println!("  │  └─ Part 3: {}", );
+    for fci in flow_control {
+        match fci {
+            FlowControlInstruction::Take => i += 1,
+            FlowControlInstruction::Cycle => {
+                let instruction = instructions.remove(i as usize);
+                instructions.push(instruction);
+                i -= 1;
+            }
+            FlowControlInstruction::Act => acts += 1,
+        }
+    }
+
+    for i in 0..instructions.len() - acts {
+        instructions.pop();
+    }
 }
 
 fn apply_instructions(grid: &mut [Vec<i64>], instructions: &Vec<Instruction>) {
@@ -114,7 +145,7 @@ fn apply_non_shift_operation(instruction: &Instruction, i: usize, j: usize, grid
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Direction {
     Col { col: usize },
     Row { row: usize },
@@ -135,7 +166,7 @@ impl Direction {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Operation {
     Add,
     Sub,
@@ -143,7 +174,7 @@ enum Operation {
     Shift,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Instruction {
     operation: Operation,
     amount: i64,
@@ -195,18 +226,18 @@ impl Instruction {
     }
 }
 
-enum FlowControl {
+enum FlowControlInstruction {
     Take,
     Cycle,
     Act,
 }
 
-impl FlowControl {
+impl FlowControlInstruction {
     pub fn of(string: &str) -> Self {
         match string {
-            "TAKE" => FlowControl::Take,
-            "CYCLE" => FlowControl::Cycle,
-            "ACT" => FlowControl::Act,
+            "TAKE" => FlowControlInstruction::Take,
+            "CYCLE" => FlowControlInstruction::Cycle,
+            "ACT" => FlowControlInstruction::Act,
             _ => panic!("Unknown flow control: {}", string),
         }
     }
@@ -277,7 +308,11 @@ mod tests {
         };
         apply_instructions(&mut grid, &vec![instruction]);
         assert_eq!(
-            vec![vec![-229, 2, 3], vec![-226, 5, 6], vec![-223, 8, 9]],
+            vec![
+                vec![1073741595, 2, 3],
+                vec![1073741598, 5, 6],
+                vec![1073741601, 8, 9]
+            ],
             grid
         );
     }
