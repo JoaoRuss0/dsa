@@ -7,6 +7,7 @@ pub mod E169;
 pub mod E191;
 pub mod E20;
 pub mod E217;
+pub mod E225;
 pub mod E242;
 pub mod E26;
 pub mod E28;
