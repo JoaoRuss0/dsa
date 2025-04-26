@@ -15,6 +15,7 @@ pub mod E28;
 pub mod E700;
 pub mod E733;
 pub mod E876;
+pub mod E94;
 pub mod M11;
 pub mod M128;
 pub mod M15;
