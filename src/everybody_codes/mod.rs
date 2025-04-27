@@ -1,2 +1,2 @@
-mod kingdom_of_algorithmia;
+pub mod kingdom_of_algorithmia;
 pub mod run;

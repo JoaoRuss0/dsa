@@ -1,6 +1,8 @@
-use crate::everybody_codes::kingdom_of_algorithmia::{Quest1, Quest2};
+use crate::everybody_codes::kingdom_of_algorithmia;
 
 pub fn execute() {
-    Quest1::run();
-    Quest2::run();
+    println!("Kingdom of Algorithmia");
+    kingdom_of_algorithmia::Quest1::run();
+    kingdom_of_algorithmia::Quest2::run();
+    kingdom_of_algorithmia::Quest3::run();
 }
