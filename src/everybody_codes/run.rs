@@ -5,4 +5,5 @@ pub fn execute() {
     kingdom_of_algorithmia::Quest1::run();
     kingdom_of_algorithmia::Quest2::run();
     kingdom_of_algorithmia::Quest3::run();
+    kingdom_of_algorithmia::Quest4::run();
 }
