@@ -18,6 +18,7 @@ pub mod E242;
 pub mod E26;
 pub mod E28;
 pub mod E496;
+pub mod E543;
 pub mod E700;
 pub mod E733;
 pub mod E876;
