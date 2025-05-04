@@ -27,33 +27,28 @@ impl Solution {
         if root.is_none() {
             return 0;
         }
-        let (biggest_path, biggest_path_between_nodes) = get_diameter(root.unwrap());
-        biggest_path.max(biggest_path_between_nodes)
+        get_diameter(root.unwrap()).1
     }
 }
 
 fn get_diameter(node: Rc<RefCell<TreeNode>>) -> (i32, i32) {
     let borrowed = node.borrow();
 
-    let mut path_left = (0, 0);
-    if let Some(left) = &borrowed.left {
-        path_left = get_diameter(Rc::clone(left));
-        path_left.0 += 1;
+    let mut left = (-1, 0);
+    if let Some(left_node) = &borrowed.left {
+        left = get_diameter(Rc::clone(left_node));
     }
 
-    let mut path_right = (0, 0);
-    if let Some(right) = &borrowed.right {
-        path_right = get_diameter(Rc::clone(right));
-        path_right.0 += 1;
+    let mut right = (-1, 0);
+    if let Some(right_node) = &borrowed.right {
+        right = get_diameter(Rc::clone(right_node));
     }
 
-    let biggest_path = (path_left.0).max(path_right.0);
-    let biggest_path_between_nodes = path_left
-        .1
-        .max(path_right.1)
-        .max(path_right.0 + path_left.0);
+    let height = left.0.max(right.0) + 1;
+    let diameter = right.0 + left.0 + 2;
+    let biggest_diameter = diameter.max(left.1).max(right.1);
 
-    (biggest_path, biggest_path_between_nodes)
+    (height, biggest_diameter)
 }
 
 #[cfg(test)]
