@@ -11,7 +11,7 @@ impl Solution {
             for c in s.chars() {
                 map[c as usize - b'a' as usize] += 1;
             }
-            groups.entry(map).or_insert(Vec::new()).push(s);
+            groups.entry(map).or_default().push(s);
         }
 
         groups.values().cloned().collect::<Vec<Vec<String>>>()
@@ -24,16 +24,22 @@ mod tests {
 
     #[test]
     fn test1() {
-        assert_eq!(
-            vec![vec!["bat"], vec!["nat", "tan"], vec!["ate", "eat", "tea"]],
-            Solution::group_anagrams(vec![
-                "eat".to_string(),
-                "tea".to_string(),
-                "tan".to_string(),
-                "ate".to_string(),
-                "nat".to_string(),
-                "bat".to_string()
-            ])
-        );
+        let actual = Solution::group_anagrams(vec![
+            "eat".to_string(),
+            "tea".to_string(),
+            "tan".to_string(),
+            "ate".to_string(),
+            "nat".to_string(),
+            "bat".to_string(),
+        ]);
+
+        let expected = [
+            vec!["eat".to_string(), "tea".to_string(), "ate".to_string()],
+            vec!["tan".to_string(), "nat".to_string()],
+            vec!["bat".to_string()],
+        ];
+
+        assert_eq!(actual.len(), expected.len());
+        expected.iter().for_each(|v| assert!(actual.contains(v)));
     }
 }
