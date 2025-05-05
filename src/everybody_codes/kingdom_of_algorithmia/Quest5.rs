@@ -118,16 +118,6 @@ fn get_index_on_new_column(dance_floor: &[Vec<u32>], column: usize, clapper: u32
         (1, _) => len - row as usize + 1,
         _ => panic!("Invalid side"),
     }
-
-    /*
-    let len = dance_floor[column].len();
-    let pos = (clapper % (len * 2) as u32) as usize - 1;
-
-    match pos < len {
-        true => pos,
-        false => len - (pos - len),
-    }
-    */
 }
 
 #[cfg(test)]
