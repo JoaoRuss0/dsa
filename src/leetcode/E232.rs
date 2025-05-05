@@ -1,7 +1,8 @@
 struct Solution;
 
 struct MyQueue {
-    stack: Vec<i32>,
+    added: Vec<i32>,
+    front: Vec<i32>,
 }
 
 /**
@@ -10,37 +11,42 @@ struct MyQueue {
  */
 impl MyQueue {
     fn new() -> Self {
-        MyQueue { stack: Vec::new() }
+        MyQueue {
+            added: Vec::new(),
+            front: Vec::new(),
+        }
     }
 
     fn push(&mut self, x: i32) {
-        let mut temp = Vec::new();
-
-        while let Some(x) = self.stack.pop() {
-            temp.push(x);
-        }
-        self.stack.push(x);
-        while let Some(x) = temp.pop() {
-            self.stack.push(x);
-        }
+        self.added.push(x);
     }
 
     fn pop(&mut self) -> i32 {
-        if !self.empty() {
-            return self.stack.pop().unwrap();
+        if self.empty() {
+            panic!("Stack is empty");
         }
-        panic!("Stack is empty")
+
+        if !self.front.is_empty() {
+            return self.front.pop().unwrap();
+        }
+
+        while let Some(popped) = self.added.pop() {
+            self.front.push(popped);
+        }
+        self.front.pop().unwrap()
     }
 
-    fn peek(&self) -> i32 {
-        if !self.empty() {
-            return *self.stack.last().unwrap();
+    fn peek(&mut self) -> i32 {
+        if self.front.is_empty() {
+            while let Some(popped) = self.added.pop() {
+                self.front.push(popped);
+            }
         }
-        panic!("Stack is empty")
+        *self.front.last().unwrap()
     }
 
     fn empty(&self) -> bool {
-        self.stack.is_empty()
+        self.front.is_empty() && self.added.is_empty()
     }
 }
 
