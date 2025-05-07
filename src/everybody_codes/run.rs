@@ -8,4 +8,5 @@ pub fn execute() {
     kingdom_of_algorithmia::Quest4::run();
     kingdom_of_algorithmia::Quest5::run();
     kingdom_of_algorithmia::Quest6::run();
+    kingdom_of_algorithmia::Quest7::run();
 }
