@@ -25,9 +25,32 @@ pub fn run() {
         rank_device_plans(&devices, &track, 10)
     );
 
-    //path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part3.txt";
-    //input = std::fs::read_to_string(path).unwrap();
-    //println!("  │  └─ Part 3: {}", );
+    path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part3.txt";
+    input = std::fs::read_to_string(path).unwrap();
+    devices = get_devices(input);
+
+    path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part3_track.txt";
+    input = std::fs::read_to_string(path).unwrap();
+    track = get_track(input);
+
+    let plan = devices.values().next().unwrap();
+    let knight_essence = run_laps(&track, plan, 2024, usize::MAX);
+
+    let mut plans = Vec::new();
+    combine(
+        HashMap::from([('+', 5), ('-', 3), ('=', 3)]),
+        Vec::new(),
+        &mut plans,
+    );
+
+    println!(
+        "  │  └─ Part 3: {}",
+        plans
+            .iter()
+            .map(|p| run_laps(&track, p, 2024, knight_essence))
+            .filter(|&e| e > knight_essence)
+            .count()
+    );
 }
 
 fn get_devices(input: String) -> HashMap<String, Vec<char>> {
@@ -53,22 +76,42 @@ fn get_track(input: String) -> Vec<char> {
         .collect::<Vec<Vec<char>>>();
     let mut track: Vec<char> = Vec::new();
 
+    let mut last: (usize, usize) = (0, 0);
+    let mut curr: (usize, usize) = (0, 0);
     let directions = vec![(0, 1), (1, 0), (0, -1), (-1, 0)];
-    let mut pos: (usize, usize) = (0, 0);
-    for d in directions {
-        loop {
-            let next_candidate: (i32, i32) = (pos.0 as i32 + d.0, pos.1 as i32 + d.1);
+
+    loop {
+        let mut next = None;
+        for &d in &directions {
+            let next_candidate: (i32, i32) = (curr.0 as i32 + d.0, curr.1 as i32 + d.1);
             if next_candidate.0 < 0 || next_candidate.1 < 0 {
-                break;
+                continue;
             }
 
-            let next = (next_candidate.0 as usize, next_candidate.1 as usize);
-            if next.0 >= raw_track.len() || next.1 >= raw_track[next.0].len() {
-                break;
+            let next_inside = (next_candidate.0 as usize, next_candidate.1 as usize);
+            if next_inside.0 >= raw_track.len()
+                || next_inside.1 >= raw_track[next_inside.0].len()
+                || raw_track[next_inside.0][next_inside.1] == ' '
+                || next_inside == last
+            {
+                continue;
             }
 
-            track.push(raw_track[next.0][next.1]);
-            pos = next
+            next = Some(next_inside);
+            break;
+        }
+
+        match next {
+            Some(n) => {
+                track.push(raw_track[n.0][n.1]);
+                last = curr;
+                curr = n;
+
+                if raw_track[curr.0][curr.1] == 'S' {
+                    break;
+                }
+            }
+            None => break,
         }
     }
 
@@ -78,16 +121,25 @@ fn get_track(input: String) -> Vec<char> {
 fn rank_device_plans(devices: &HashMap<String, Vec<char>>, track: &[char], laps: usize) -> String {
     let mut ranking = devices
         .iter()
-        .map(|(id, plan)| {
-            let mut power = 10;
-            let mut sum = 0;
-            let mut pos = 0;
-            (0..laps).for_each(|_| sum += run_track(track, plan, &mut power, &mut pos));
-            (id.clone(), sum)
-        })
+        .map(|(id, plan)| (id.clone(), run_laps(track, plan, laps, usize::MAX)))
         .collect::<Vec<(String, usize)>>();
     ranking.sort_by(|p, n| n.1.cmp(&p.1));
     ranking.iter().map(|(id, _)| id.clone()).collect::<String>()
+}
+
+fn run_laps(track: &[char], plan: &[char], laps: usize, stop_at: usize) -> usize {
+    let mut power = 10;
+    let mut sum = 0;
+    let mut pos = 0;
+
+    for _ in 0..laps {
+        sum += run_track(track, plan, &mut power, &mut pos);
+        if sum >= stop_at {
+            break;
+        }
+    }
+
+    sum
 }
 
 fn run_track(track: &[char], plan: &[char], power: &mut usize, pos: &mut usize) -> usize {
@@ -113,4 +165,24 @@ fn run_track(track: &[char], plan: &[char], power: &mut usize, pos: &mut usize) 
         *pos += 1;
     }
     sum
+}
+
+fn combine(to_use: HashMap<char, usize>, current: Vec<char>, plans: &mut Vec<Vec<char>>) {
+    if to_use.is_empty() {
+        plans.push(current.clone());
+    }
+
+    for &action in to_use.keys() {
+        let mut updated_to_use = to_use.clone();
+        let entry = updated_to_use.get_mut(&action).unwrap();
+        if *entry == 1 {
+            updated_to_use.remove(&action);
+        } else {
+            *entry -= 1;
+        }
+
+        let mut updated_current = current.clone();
+        updated_current.push(action);
+        combine(updated_to_use, updated_current, plans);
+    }
 }
