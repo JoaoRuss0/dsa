@@ -35,13 +35,11 @@ impl Solution {
             let mut next_layer = Vec::new();
             let mut values = Vec::new();
 
-            for node in layer {
-                if let Some(node_ref) = node {
-                    let node = node_ref.borrow();
-                    values.push(node.val);
-                    next_layer.push(node.left.clone());
-                    next_layer.push(node.right.clone());
-                }
+            for node in layer.into_iter().flatten() {
+                let node = node.borrow();
+                values.push(node.val);
+                next_layer.push(node.left.clone());
+                next_layer.push(node.right.clone());
             }
 
             if !values.is_empty() {
