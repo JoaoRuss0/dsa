@@ -25,7 +25,7 @@ struct Solution;
 impl Solution {
     pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
         let mut traversal = Vec::new();
-        let mut layer = Vec::from(vec![root]);
+        let mut layer = vec![root];
 
         loop {
             if layer.is_empty() {
