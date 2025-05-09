@@ -65,6 +65,34 @@ impl Solution {
         }
         true
     }
+
+    pub fn is_symmetric_recursive(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        if root.is_none() {
+            return true;
+        }
+
+        let root = root.unwrap();
+        let borrowed = root.borrow();
+
+        are_nodes_equal(&borrowed.left, &borrowed.right)
+    }
+}
+
+fn are_nodes_equal(
+    node1: &Option<Rc<RefCell<TreeNode>>>,
+    node2: &Option<Rc<RefCell<TreeNode>>>,
+) -> bool {
+    match (node1, node2) {
+        (None, None) => true,
+        (Some(n1), Some(n2)) => {
+            let n1 = n1.borrow();
+            let n2 = n2.borrow();
+            n1.val == n2.val
+                && are_nodes_equal(&n1.left, &n2.right)
+                && are_nodes_equal(&n1.right, &n2.left)
+        }
+        _ => false,
+    }
 }
 
 #[cfg(test)]
@@ -152,5 +180,65 @@ mod tests {
         root.left = Some(Rc::new(RefCell::new(left)));
 
         assert!(Solution::is_symmetric(Some(Rc::new(RefCell::new(root)))));
+    }
+
+    #[test]
+    fn test4() {
+        let mut root = TreeNode::new(1);
+
+        let mut left = TreeNode::new(2);
+        let mut right = TreeNode::new(2);
+
+        let lr = TreeNode::new(3);
+        let rr = TreeNode::new(3);
+
+        right.right = Some(Rc::new(RefCell::new(rr)));
+        left.right = Some(Rc::new(RefCell::new(lr)));
+
+        root.right = Some(Rc::new(RefCell::new(right)));
+        root.left = Some(Rc::new(RefCell::new(left)));
+
+        assert!(!Solution::is_symmetric_recursive(Some(Rc::new(
+            RefCell::new(root)
+        ))));
+    }
+
+    #[test]
+    fn test5() {
+        let mut root = TreeNode::new(2);
+
+        let mut left = TreeNode::new(3);
+        let mut right = TreeNode::new(3);
+
+        let ll = TreeNode::new(4);
+        let mut lr = TreeNode::new(5);
+
+        let mut rl = TreeNode::new(5);
+        let rr = TreeNode::new(4);
+
+        let lrl = TreeNode::new(8);
+        let lrr = TreeNode::new(9);
+
+        let rll = TreeNode::new(9);
+        let rlr = TreeNode::new(8);
+
+        rl.left = Some(Rc::new(RefCell::new(rll)));
+        rl.right = Some(Rc::new(RefCell::new(rlr)));
+
+        lr.left = Some(Rc::new(RefCell::new(lrl)));
+        lr.right = Some(Rc::new(RefCell::new(lrr)));
+
+        right.right = Some(Rc::new(RefCell::new(rr)));
+        right.left = Some(Rc::new(RefCell::new(rl)));
+
+        left.right = Some(Rc::new(RefCell::new(lr)));
+        left.left = Some(Rc::new(RefCell::new(ll)));
+
+        root.right = Some(Rc::new(RefCell::new(right)));
+        root.left = Some(Rc::new(RefCell::new(left)));
+
+        assert!(Solution::is_symmetric_recursive(Some(Rc::new(
+            RefCell::new(root)
+        ))));
     }
 }
