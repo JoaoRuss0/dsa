@@ -1,5 +1,3 @@
-struct Solution;
-
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
     pub val: i32,
@@ -12,6 +10,8 @@ impl ListNode {
         ListNode { next: None, val }
     }
 }
+
+struct Solution;
 
 impl Solution {
     pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {

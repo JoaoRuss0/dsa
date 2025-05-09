@@ -1,5 +1,3 @@
-struct Solution;
-
 struct MyQueue {
     added: Vec<i32>,
     front: Vec<i32>,

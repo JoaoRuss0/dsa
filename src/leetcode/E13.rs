@@ -1,5 +1,3 @@
-struct Solution;
-
 enum Numeral {
     I,
     V,
@@ -39,6 +37,8 @@ impl Numeral {
         self.value() < n.value()
     }
 }
+
+struct Solution;
 
 impl Solution {
     pub fn roman_to_int(s: String) -> i32 {

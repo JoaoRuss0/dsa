@@ -1,5 +1,3 @@
-struct Solution;
-
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
@@ -13,6 +11,8 @@ impl ListNode {
         ListNode { next: None, val }
     }
 }
+
+struct Solution;
 
 impl Solution {
     pub fn merge_two_lists(
