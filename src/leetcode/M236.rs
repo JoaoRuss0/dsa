@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 // Definition for a binary tree node.
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct TreeNode {
     pub val: i32,
     pub left: Option<Rc<RefCell<TreeNode>>>,
@@ -28,55 +28,25 @@ impl Solution {
         p: Option<Rc<RefCell<TreeNode>>>,
         q: Option<Rc<RefCell<TreeNode>>>,
     ) -> Option<Rc<RefCell<TreeNode>>> {
-        let root = root?;
-
-        let p = p.unwrap();
-        let q = q.unwrap();
-
-        let mut p_path: Option<Vec<i32>> = None;
-        let mut q_path: Option<Vec<i32>> = None;
-
-        let mut queue = Vec::new();
-        queue.push((vec![], root));
-
-        while let Some((path, node)) = queue.pop() {
-            let node_inner = node.borrow();
-            let mut new_path = path.clone();
-            new_path.push(node_inner.val);
-
-            if node_inner.val.eq(&p.borrow().val) {
-                p_path = Some(new_path.clone());
-            } else if node_inner.val.eq(&q.borrow().val) {
-                q_path = Some(new_path.clone());
-            } else {
-                if node_inner.left.is_some() {
-                    queue.push((new_path.clone(), node_inner.left.clone().unwrap()));
-                }
-
-                if node_inner.right.is_some() {
-                    queue.push((new_path.clone(), node_inner.right.clone().unwrap()));
-                }
-            }
-
-            if p_path.is_some() && q_path.is_some() {
-                break;
-            }
+        if root.is_none() {
+            return None;
         }
 
-        match (p_path, q_path) {
-            (Some(p_path), Some(q_path)) => {
-                let len = p_path.len().min(q_path.len());
+        if root == p || root == q {
+            return root;
+        }
 
-                for i in (0..len).rev() {
-                    if p_path[i] == q_path[i] {
-                        return Some(Rc::new(RefCell::new(TreeNode::new(q_path[i]))));
-                    }
-                }
-                None
-            }
-            (Some(_), None) => Some(Rc::new(RefCell::new(TreeNode::new(p.borrow().val)))),
-            (None, Some(_)) => Some(Rc::new(RefCell::new(TreeNode::new(q.borrow().val)))),
-            _ => None,
+        let node = root?;
+        let borrowed = node.borrow();
+        let left = Self::lowest_common_ancestor(borrowed.left.clone(), p.clone(), q.clone());
+        let right = Self::lowest_common_ancestor(borrowed.right.clone(), p.clone(), q.clone());
+
+        let val = borrowed.val;
+        match (left, right) {
+            (Some(_), Some(_)) => Some(Rc::new(RefCell::new(TreeNode::new(val)))),
+            (Some(l), None) => Some(l),
+            (None, Some(r)) => Some(r),
+            (None, None) => None,
         }
     }
 }
@@ -102,7 +72,7 @@ mod tests {
         let lrr = TreeNode::new(4);
 
         lr.left = Some(Rc::new(RefCell::new(lrl)));
-        lr.right = Some(Rc::new(RefCell::new(lrr)));
+        lr.right = Some(Rc::new(RefCell::new(lrr.clone())));
 
         left.left = Some(Rc::new(RefCell::new(ll)));
         left.right = Some(Rc::new(RefCell::new(lr)));
@@ -110,23 +80,28 @@ mod tests {
         right.left = Some(Rc::new(RefCell::new(rl)));
         right.right = Some(Rc::new(RefCell::new(rr)));
 
-        root.left = Some(Rc::new(RefCell::new(left)));
-        root.right = Some(Rc::new(RefCell::new(right)));
+        root.left = Some(Rc::new(RefCell::new(left.clone())));
+        root.right = Some(Rc::new(RefCell::new(right.clone())));
 
         let root_node = Some(Rc::new(RefCell::new(root)));
 
-        let mut p = Some(Rc::new(RefCell::new(TreeNode::new(5))));
-        let mut q = Some(Rc::new(RefCell::new(TreeNode::new(1))));
+        let p = Some(Rc::new(RefCell::new(left)));
+        let mut q = Some(Rc::new(RefCell::new(right)));
         assert_eq!(
-            Some(Rc::new(RefCell::new(TreeNode::new(3)))),
-            Solution::lowest_common_ancestor(root_node.clone(), p, q)
+            3,
+            Solution::lowest_common_ancestor(root_node.clone(), p.clone(), q)
+                .unwrap()
+                .borrow()
+                .val
         );
 
-        p = Some(Rc::new(RefCell::new(TreeNode::new(5))));
-        q = Some(Rc::new(RefCell::new(TreeNode::new(4))));
+        q = Some(Rc::new(RefCell::new(lrr)));
         assert_eq!(
-            Some(Rc::new(RefCell::new(TreeNode::new(5)))),
+            5,
             Solution::lowest_common_ancestor(root_node, p, q)
+                .unwrap()
+                .borrow()
+                .val
         );
     }
 }
