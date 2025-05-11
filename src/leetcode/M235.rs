@@ -33,25 +33,23 @@ impl Solution {
 
         let min = p_val.min(q_val);
         let max = p_val.max(q_val);
-
-        let mut next = root;
-        while let Some(n) = next {
-            let borrowed = n.borrow();
-            if max < borrowed.val {
-                next = borrowed.left.clone();
-                continue;
-            }
-
-            if min > borrowed.val {
-                next = borrowed.right.clone();
-                continue;
-            }
-
-            return Some(n.clone());
-        }
-
-        None
+        Some(inner(&root.unwrap(), min, max))
     }
+}
+
+fn inner(node: &Rc<RefCell<TreeNode>>, min: i32, max: i32) -> Rc<RefCell<TreeNode>> {
+    let borrowed = node.borrow();
+    let val = borrowed.val;
+
+    if max < val {
+        return inner(borrowed.left.as_ref().unwrap(), min, max);
+    }
+
+    if min > val {
+        return inner(borrowed.right.as_ref().unwrap(), min, max);
+    }
+
+    node.clone()
 }
 
 #[cfg(test)]
