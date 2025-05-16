@@ -51,14 +51,14 @@ mod tests {
         let mut root = TreeNode::new(0);
 
         let mut left = TreeNode::new(-3);
-        let mut right = TreeNode::new(5);
+        let mut right = TreeNode::new(9);
 
         let ll = TreeNode::new(-10);
 
-        let rl = TreeNode::new(9);
+        let rl = TreeNode::new(5);
 
-        right.left = Some(Rc::new(RefCell::new(ll)));
-        left.left = Some(Rc::new(RefCell::new(rl)));
+        left.left = Some(Rc::new(RefCell::new(ll)));
+        right.left = Some(Rc::new(RefCell::new(rl)));
 
         root.left = Some(Rc::new(RefCell::new(left)));
         root.right = Some(Rc::new(RefCell::new(right)));
