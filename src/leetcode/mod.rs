@@ -3,6 +3,7 @@ pub mod E100;
 pub mod E101;
 pub mod E104;
 pub mod E108;
+pub mod E110;
 pub mod E121;
 pub mod E125;
 pub mod E13;
