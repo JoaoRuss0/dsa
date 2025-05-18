@@ -47,3 +47,4 @@ pub mod M46;
 pub mod M49;
 pub mod M62;
 pub mod M75;
+pub mod M8;
