@@ -1,3 +1,5 @@
+use crate::leetcode::utils::list_node::ListNode;
+
 // Definition for singly-linked list.
 struct Solution;
 
