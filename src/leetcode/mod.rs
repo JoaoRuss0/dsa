@@ -31,6 +31,7 @@ pub mod E653;
 pub mod E700;
 pub mod E733;
 pub mod E876;
+pub mod E88;
 pub mod E94;
 pub mod M1008;
 pub mod M102;
