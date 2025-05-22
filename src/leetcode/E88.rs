@@ -2,36 +2,18 @@ struct Solution;
 
 impl Solution {
     pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
-        if n == 0 {
-            return;
-        }
+        let mut i = m;
+        let mut j = n;
 
-        if m == 0 {
-            nums1.clear();
-            nums1.extend(nums2.iter());
-            return;
-        }
-
-        let mut i = 0;
-        let mut j = 0;
-
-        while i < m + j && j < n {
-            if nums1[i as usize] < nums2[j as usize] {
-                i += 1;
+        while j > 0 {
+            if i > 0 && nums1[i as usize - 1] > nums2[j as usize - 1] {
+                nums1[(i + j - 1) as usize] = nums1[i as usize - 1];
+                i -= 1;
                 continue;
             }
 
-            nums1.insert(i as usize, nums2[j as usize]);
-            nums1.pop();
-            i += 1;
-            j += 1;
-        }
-
-        while i < m + n && j < n {
-            nums1.insert(i as usize, nums2[j as usize]);
-            nums1.pop();
-            j += 1;
-            i += 1;
+            nums1[(i + j - 1) as usize] = nums2[j as usize - 1];
+            j -= 1;
         }
     }
 }
