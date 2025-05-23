@@ -1,6 +1,9 @@
+use std::cmp::Reverse;
+use std::collections::BinaryHeap;
+
 struct KthLargest {
     k: i32,
-    nums: Vec<i32>,
+    nums: BinaryHeap<Reverse<i32>>,
 }
 
 /**
@@ -9,42 +12,26 @@ struct KthLargest {
  */
 impl KthLargest {
     fn new(k: i32, nums: Vec<i32>) -> Self {
-        let mut temp = Self {
-            k,
-            nums: Vec::new(),
-        };
+        let mut heap = BinaryHeap::new();
+        nums.into_iter().for_each(|num| {
+            heap.push(Reverse(num));
+        });
 
-        for num in nums {
-            temp.add(num);
+        while heap.len() > k as usize {
+            heap.pop();
         }
 
-        temp
+        Self { k, nums: heap }
     }
 
     fn add(&mut self, val: i32) -> i32 {
-        let mut temp = Vec::new();
-        while let Some(popped) = self.nums.pop() {
-            if popped < val {
-                temp.push(popped);
-            } else {
-                self.nums.push(popped);
-                break;
-            }
+        self.nums.push(Reverse(val));
+
+        while self.nums.len() > self.k as usize {
+            self.nums.pop();
         }
 
-        if self.nums.len() < self.k as usize {
-            self.nums.push(val);
-        }
-
-        while let Some(popped) = temp.pop() {
-            if self.nums.len() < self.k as usize {
-                self.nums.push(popped);
-            } else {
-                break;
-            }
-        }
-
-        self.nums[self.nums.len() - 1]
+        self.nums.peek().unwrap().0
     }
 }
 
