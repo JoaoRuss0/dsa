@@ -43,6 +43,7 @@ pub mod M15;
 pub mod M153;
 pub mod M173;
 pub mod M2;
+pub mod M230;
 pub mod M235;
 pub mod M236;
 pub mod M238;
