@@ -6,33 +6,30 @@ struct Solution;
 
 impl Solution {
     pub fn kth_smallest(root: Option<Rc<RefCell<TreeNode>>>, k: i32) -> i32 {
-        let mut k = k;
-        find_kth_smallest(root, &mut k)
+        let mut stack = Vec::new();
+        let mut count = 0;
+        let mut current = root;
+
+        while current.is_some() || !stack.is_empty() {
+            while current.is_some() {
+                stack.push(current.clone());
+
+                let node = current.as_ref().unwrap().clone();
+                current = node.borrow().left.clone();
+            }
+
+            let popped = stack.pop().unwrap().unwrap();
+
+            count += 1;
+            if k == count {
+                return popped.borrow().val;
+            }
+
+            current = popped.borrow().right.clone();
+        }
+
+        -1
     }
-}
-
-fn find_kth_smallest(root: Option<Rc<RefCell<TreeNode>>>, k: &mut i32) -> i32 {
-    if let Some(node) = root {
-        let borrowed = node.borrow();
-
-        let mut returned = find_kth_smallest(borrowed.left.clone(), k);
-        if returned != -1 {
-            return returned;
-        }
-
-        if *k == 1 {
-            return borrowed.val;
-        }
-
-        *k -= 1;
-
-        returned = find_kth_smallest(borrowed.right.clone(), k);
-        if returned != -1 {
-            return returned;
-        }
-    }
-
-    -1
 }
 
 #[cfg(test)]
@@ -104,8 +101,6 @@ mod tests {
 
         root.left = Some(Rc::new(RefCell::new(left)));
         root.right = Some(Rc::new(RefCell::new(right)));
-
-        let mut k = 7;
 
         assert_eq!(
             -1,
