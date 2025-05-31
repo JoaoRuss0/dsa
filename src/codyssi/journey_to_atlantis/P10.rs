@@ -3,7 +3,7 @@ use std::collections::{BinaryHeap, HashSet};
 pub fn run() {
     println!("  ├─ Problem 10 - Cyclops Chaos");
 
-    let path = "input/codyssi/journey_to_atlantis/problem10.txt";
+    let path = "input/codyssi/journey_to_atlantis/P10.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let mut grid: Vec<Vec<i64>> = Vec::new();

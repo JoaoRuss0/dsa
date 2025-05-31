@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 4 - Aeolian Transmissions");
 
-    let path = "input/codyssi/journey_to_atlantis/problem4.txt";
+    let path = "input/codyssi/journey_to_atlantis/P4.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let get_char_size = |c: char| -> u64 {

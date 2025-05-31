@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Quest 4 - Royal Smith's Puzzle");
 
-    let mut path = "input/everybody_codes/kingdom_of_algorithmia/quest4/part1.txt";
+    let mut path = "input/everybody_codes/kingdom_of_algorithmia/Q4/P1.txt";
     let mut input = std::fs::read_to_string(path).unwrap();
 
     let mut nails = input
@@ -12,7 +12,7 @@ pub fn run() {
     let mut min = nails.iter().min().unwrap();
     println!("  │  ├─ Part 1: {}", sum - min * nails.len());
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest4/part2.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q4/P2.txt";
     input = std::fs::read_to_string(path).unwrap();
 
     nails = input
@@ -23,7 +23,7 @@ pub fn run() {
     min = nails.iter().min().unwrap();
     println!("  │  ├─ Part 2: {}", sum - min * nails.len());
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest4/part3.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q4/P3.txt";
     input = std::fs::read_to_string(path).unwrap();
 
     nails = input

@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 7 - Siren Disruption");
 
-    let path = "input/codyssi/journey_to_atlantis/problem7.txt";
+    let path = "input/codyssi/journey_to_atlantis/P7.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let sections = input.split("\n\n").collect::<Vec<_>>();

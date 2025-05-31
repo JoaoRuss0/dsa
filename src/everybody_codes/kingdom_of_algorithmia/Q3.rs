@@ -3,17 +3,17 @@ use std::collections::VecDeque;
 pub fn run() {
     println!("  ├─ Quest 3 - Mining Maestro");
 
-    let mut path = "input/everybody_codes/kingdom_of_algorithmia/quest3/part1.txt";
+    let mut path = "input/everybody_codes/kingdom_of_algorithmia/Q3/P1.txt";
     let mut input = std::fs::read_to_string(path).unwrap();
     let mut matrix = build_matrix(&input);
     println!("  │  ├─ Part 1: {}", mine(&mut matrix, false));
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest3/part2.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q3/P2.txt";
     input = std::fs::read_to_string(path).unwrap();
     matrix = build_matrix(&input);
     println!("  │  ├─ Part 2: {}", mine(&mut matrix, false));
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest3/part3.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q3/P3.txt";
     input = std::fs::read_to_string(path).unwrap();
     matrix = build_matrix(&input);
     wrap_in_dots(&mut matrix);

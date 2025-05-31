@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 14 - Crucial Crafting");
 
-    let path = "input/codyssi/journey_to_atlantis/problem14.txt";
+    let path = "input/codyssi/journey_to_atlantis/P14.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let items: Vec<Item> = input.lines().map(Item::from).collect();

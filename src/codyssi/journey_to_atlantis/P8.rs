@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 8 - Risky Shortcut");
 
-    let path = "input/codyssi/journey_to_atlantis/problem8.txt";
+    let path = "input/codyssi/journey_to_atlantis/P8.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let lines = input.lines().collect::<Vec<&str>>();

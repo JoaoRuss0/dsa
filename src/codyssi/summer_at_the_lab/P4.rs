@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet, VecDeque};
 pub fn run() {
     println!("  └─ Problem 4 - Traversing the Country");
 
-    let path = "input/codyssi/summer_at_the_lab/problem4.txt";
+    let path = "input/codyssi/summer_at_the_lab/P4.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let mut locations: HashMap<&str, HashSet<&str>> = HashMap::new();

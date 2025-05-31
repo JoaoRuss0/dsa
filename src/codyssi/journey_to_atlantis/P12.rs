@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 12 - Challenging the Whirlpool");
 
-    let path = "input/codyssi/journey_to_atlantis/problem12.txt";
+    let path = "input/codyssi/journey_to_atlantis/P12.txt";
     let input = std::fs::read_to_string(path).unwrap();
     let sections = input.split("\n\n").collect::<Vec<&str>>();
 

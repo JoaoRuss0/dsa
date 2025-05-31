@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 2 - Sensors and Circuits");
 
-    let path = "input/codyssi/summer_at_the_lab/problem2.txt";
+    let path = "input/codyssi/summer_at_the_lab/P2.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let sensors = input

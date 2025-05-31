@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Quest 1 - The Battle for the Farmlands");
 
-    let mut path = "input/everybody_codes/kingdom_of_algorithmia/quest1/part1.txt";
+    let mut path = "input/everybody_codes/kingdom_of_algorithmia/Q1/P1.txt";
     let mut input = std::fs::read_to_string(path).unwrap();
 
     println!(
@@ -9,7 +9,7 @@ pub fn run() {
         input.chars().map(get_enemy_potion_cost).sum::<u64>()
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest1/part2.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q1/P2.txt";
     input = std::fs::read_to_string(path).unwrap();
 
     println!(
@@ -22,7 +22,7 @@ pub fn run() {
             .sum::<u64>()
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest1/part3.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q1/P3.txt";
     input = std::fs::read_to_string(path).unwrap();
 
     println!(

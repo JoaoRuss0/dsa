@@ -3,7 +3,7 @@ use std::collections::{HashMap, VecDeque};
 pub fn run() {
     println!("  ├─ Problem 9 - Windy Bargain");
 
-    let path = "input/codyssi/journey_to_atlantis/problem9.txt";
+    let path = "input/codyssi/journey_to_atlantis/P9.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let mut sections = input.split("\n\n").collect::<VecDeque<&str>>();

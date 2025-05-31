@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 11 - Games in a Storm");
 
-    let path = "input/codyssi/journey_to_atlantis/problem11.txt";
+    let path = "input/codyssi/journey_to_atlantis/P11.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let numbers_and_base = input

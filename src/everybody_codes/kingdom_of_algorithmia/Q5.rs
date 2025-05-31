@@ -3,21 +3,21 @@ use std::collections::{HashMap, HashSet};
 pub fn run() {
     println!("  ├─ Quest 5 - Pseudo-Random Clap Dance");
 
-    let mut path = "input/everybody_codes/kingdom_of_algorithmia/quest5/part1.txt";
+    let mut path = "input/everybody_codes/kingdom_of_algorithmia/Q5/P1.txt";
     let mut input = std::fs::read_to_string(path).unwrap();
     println!(
         "  │  ├─ Part 1: {}",
         part1(&mut get_dance_floor(&input), 10)
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest5/part2.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q5/P2.txt";
     input = std::fs::read_to_string(path).unwrap();
     println!(
         "  │  ├─ Part 2: {}",
         part2(&mut get_dance_floor(&input), 2024)
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest5/part3.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q5/P3.txt";
     input = std::fs::read_to_string(path).unwrap();
     println!("  │  └─ Part 3: {}", part3(&mut get_dance_floor(&input)));
 }

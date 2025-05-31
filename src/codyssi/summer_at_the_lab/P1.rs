@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 1 - Handling the Budget");
 
-    let path = "input/codyssi/summer_at_the_lab/problem1.txt";
+    let path = "input/codyssi/summer_at_the_lab/P1.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let mut prices = input

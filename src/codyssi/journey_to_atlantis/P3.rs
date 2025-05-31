@@ -3,7 +3,7 @@ use std::collections::HashSet;
 pub fn run() {
     println!("  ├─ Problem 3 - Supplies in Surplus");
 
-    let path = "input/codyssi/journey_to_atlantis/problem3.txt";
+    let path = "input/codyssi/journey_to_atlantis/P3.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let get_range = |r: &str| -> HashSet<i64> {

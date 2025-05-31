@@ -4,14 +4,14 @@ pub fn run() {
     println!("  ├─ Quest 2 - The Runes of Power");
 
     let (mut words, mut sections) =
-        read_file("input/everybody_codes/kingdom_of_algorithmia/quest2/part1.txt".to_string());
+        read_file("input/everybody_codes/kingdom_of_algorithmia/Q2/P1.txt".to_string());
 
     let word_count = get_word_count_in_inscription(words, sections[0].to_string());
 
     println!("  │  ├─ Part 1: {}", word_count);
 
     (words, sections) =
-        read_file("input/everybody_codes/kingdom_of_algorithmia/quest2/part2.txt".to_string());
+        read_file("input/everybody_codes/kingdom_of_algorithmia/Q2/P2.txt".to_string());
 
     let mut matrix = sections.iter().map(|s| s.chars().collect()).collect();
     let mut symbol_count =
@@ -20,7 +20,7 @@ pub fn run() {
     println!("  │  ├─ Part 2: {}", symbol_count);
 
     (words, sections) =
-        read_file("input/everybody_codes/kingdom_of_algorithmia/quest2/part3.txt".to_string());
+        read_file("input/everybody_codes/kingdom_of_algorithmia/Q2/P3.txt".to_string());
 
     matrix = sections
         .iter()

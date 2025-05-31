@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 pub fn run() {
     println!("  ├─ Quest 6 - The Tree of Titans");
 
-    let mut path = "input/everybody_codes/kingdom_of_algorithmia/quest6/part1.txt";
+    let mut path = "input/everybody_codes/kingdom_of_algorithmia/Q6/P1.txt";
     let mut input = std::fs::read_to_string(path).unwrap();
     let mut tree = build_tree(input);
     let get_node = |n: &String| -> String { n.clone() };
@@ -12,7 +12,7 @@ pub fn run() {
         find_strongest_fruit_path(&tree, get_node)
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest6/part2.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q6/P2.txt";
     input = std::fs::read_to_string(path).unwrap();
     tree = build_tree(input);
     let get_first_char = |n: &String| -> String { n.chars().next().unwrap().to_string() };
@@ -21,7 +21,7 @@ pub fn run() {
         find_strongest_fruit_path(&tree, get_first_char)
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest6/part3.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q6/P3.txt";
     input = std::fs::read_to_string(path).unwrap();
     tree = build_tree(input);
     println!(

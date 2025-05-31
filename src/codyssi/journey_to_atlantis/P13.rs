@@ -3,7 +3,7 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 pub fn run() {
     println!("  ├─ Problem 13 - Laestrygonian Guards");
 
-    let path = "input/codyssi/journey_to_atlantis/problem13.txt";
+    let path = "input/codyssi/journey_to_atlantis/P13.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let mut nodes: HashMap<String, HashMap<String, u32>> = HashMap::new();

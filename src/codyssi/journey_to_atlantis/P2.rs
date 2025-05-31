@@ -1,7 +1,7 @@
 pub fn run() {
     println!("  ├─ Problem 2 - Absurd Arithmetic");
 
-    let path = "input/codyssi/journey_to_atlantis/problem2.txt";
+    let path = "input/codyssi/journey_to_atlantis/P2.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
     let mut rooms = input

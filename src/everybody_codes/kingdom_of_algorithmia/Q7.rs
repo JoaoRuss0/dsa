@@ -3,7 +3,7 @@ use std::collections::HashMap;
 pub fn run() {
     println!("  ├─ Quest 7 - Not Fast but Furious");
 
-    let mut path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part1.txt";
+    let mut path = "input/everybody_codes/kingdom_of_algorithmia/Q7/P1.txt";
     let mut input = std::fs::read_to_string(path).unwrap();
     let mut devices = get_devices(input);
     let mut track = vec!['='];
@@ -13,11 +13,11 @@ pub fn run() {
         rank_device_plans(&devices, &track, 10)
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part2.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q7/P2.txt";
     input = std::fs::read_to_string(path).unwrap();
     devices = get_devices(input);
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part2_track.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q7/P2_T.txt";
     input = std::fs::read_to_string(path).unwrap();
     track = get_track(input);
     println!(
@@ -25,11 +25,11 @@ pub fn run() {
         rank_device_plans(&devices, &track, 10)
     );
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part3.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q7/P3.txt";
     input = std::fs::read_to_string(path).unwrap();
     devices = get_devices(input);
 
-    path = "input/everybody_codes/kingdom_of_algorithmia/quest7/part3_track.txt";
+    path = "input/everybody_codes/kingdom_of_algorithmia/Q7/P3_T.txt";
     input = std::fs::read_to_string(path).unwrap();
     track = get_track(input);
 
