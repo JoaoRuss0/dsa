@@ -1,7 +1,7 @@
-pub mod Quest1;
-pub mod Quest2;
-pub mod Quest3;
-pub mod Quest4;
-pub mod Quest5;
-pub mod Quest6;
-pub mod Quest7;
+pub mod Q1;
+pub mod Q2;
+pub mod Q3;
+pub mod Q4;
+pub mod Q5;
+pub mod Q6;
+pub mod Q7;
