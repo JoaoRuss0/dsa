@@ -22,6 +22,9 @@ pub fn run() {
         let volume = |(l, w, h): (usize, usize, usize)| l * w * h;
         let area = |(l, w, h): (usize, usize, usize)| 2 * l * w + 2 * w * h + 2 * h * l;
 
+        let side_area = |(l, h): (usize, usize)| l * h;
+        let side_perimeter = |(l, w): (usize, usize)| 2 * l + 2 * w;
+
         let smallest = |(l, w, h): (usize, usize, usize)| {
             let smallest = if l <= w && l <= h {
                 (l, w.min(h))
@@ -34,13 +37,9 @@ pub fn run() {
             (smallest.0, smallest.1)
         };
 
-        let slack = |(s1, s2): (usize, usize)| s1 * s2;
-        let side_area = |(s1, s2): (usize, usize)| 2 * s1 + 2 * s2;
-
         let smallest_dims = smallest(dimensions);
-
-        wrap_area += area(dimensions) + slack(smallest_dims);
-        bow_len += volume(dimensions) + side_area(smallest_dims);
+        wrap_area += area(dimensions) + side_area(smallest_dims);
+        bow_len += volume(dimensions) + side_perimeter(smallest_dims);
     });
 
     println!("  │  ├─ Part 1: {}", wrap_area);
