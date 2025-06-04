@@ -5,4 +5,5 @@ pub fn execute() {
     Y2015::D1::run();
     Y2015::D2::run();
     Y2015::D3::run();
+    Y2015::D4::run();
 }

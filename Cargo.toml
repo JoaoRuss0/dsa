@@ -5,3 +5,6 @@ authors = ["João Russo <r0u6s12s18o@gmail.com>"]
 edition = "2018"
 license = "MIT"
 description = " Solutions to various coding problems"
+
+[dependencies]
+md5 = "0.7.0"
