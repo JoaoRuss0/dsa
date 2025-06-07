@@ -1,12 +1,15 @@
-use crate::everybody_codes::kingdom_of_algorithmia::*;
+use crate::everybody_codes::echoes_of_enigmatus;
 
 pub fn execute() {
-    println!("Kingdom of Algorithmia");
-    Q1::run();
-    Q2::run();
-    Q3::run();
-    Q4::run();
-    Q5::run();
-    Q6::run();
-    Q7::run();
+    //println!("Kingdom of Algorithmia");
+    //kingdom_of_algorithmia::Q1::run();
+    //kingdom_of_algorithmia::Q2::run();
+    //kingdom_of_algorithmia::Q3::run();
+    //kingdom_of_algorithmia::Q4::run();
+    //kingdom_of_algorithmia::Q5::run();
+    //kingdom_of_algorithmia::Q6::run();
+    //kingdom_of_algorithmia::Q7::run();
+
+    println!("Echoes of Enigmatus");
+    echoes_of_enigmatus::Q1::run();
 }
