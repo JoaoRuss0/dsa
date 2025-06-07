@@ -11,7 +11,9 @@ pub fn run() {
         input
             .lines()
             .map(get_parameters)
-            .map(|p| { eni(p.A, p.X, p.M) + eni(p.B, p.Y, p.M) + eni(p.C, p.Z, p.M) })
+            .map(|p| get_last_remainders(p.X, &eni(p.A, p.X, p.M).1, p.X)
+                + get_last_remainders(p.Y, &eni(p.B, p.Y, p.M).1, p.X)
+                + get_last_remainders(p.Z, &eni(p.C, p.Z, p.M).1, p.X))
             .max()
             .unwrap()
     );
@@ -25,36 +27,50 @@ pub fn run() {
             .lines()
             .map(get_parameters)
             .map(|p| {
-                eni_with_cap(p.A, p.X, p.M, Some(5))
-                    + eni_with_cap(p.B, p.Y, p.M, Some(5))
-                    + eni_with_cap(p.C, p.Z, p.M, Some(5))
+                get_last_remainders(5, &eni(p.A, p.X, p.M).1, p.X)
+                    + get_last_remainders(5, &eni(p.B, p.Y, p.M).1, p.X)
+                    + get_last_remainders(5, &eni(p.C, p.Z, p.M).1, p.X)
             })
             .max()
             .unwrap()
     );
 
-    //path = "input/everybody_codes/echoes_of_enigmatus/Q1/P3.txt";
-    //input = std::fs::read_to_string(path).unwrap();
-    //println!("  │  └─ Part 3: {}", );
+    path = "input/everybody_codes/echoes_of_enigmatus/Q1/P3.txt";
+    input = std::fs::read_to_string(path).unwrap();
+
+    println!(
+        "  │  └─ Part 3: {}",
+        input
+            .lines()
+            .map(get_parameters)
+            .map(|p| {
+                let mut result = 0;
+
+                let (mut loop_start, mut remainders) = eni(p.A, p.X, p.M);
+                result += sum_remainders(&remainders, p.X, loop_start);
+                (loop_start, remainders) = eni(p.B, p.Y, p.M);
+                result += sum_remainders(&remainders, p.Y, loop_start);
+                (loop_start, remainders) = eni(p.C, p.Z, p.M);
+                result += sum_remainders(&remainders, p.Z, loop_start);
+
+                result
+            })
+            .max()
+            .unwrap()
+    );
 }
 
-fn eni(n: usize, exp: usize, modulo: usize) -> u64 {
-    eni_with_cap(n, exp, modulo, None)
-}
-
-fn eni_with_cap(n: usize, exp: usize, modulo: usize, cap: Option<usize>) -> u64 {
+fn eni(n: usize, exp: usize, modulo: usize) -> (Option<usize>, Vec<u64>) {
     let mut score = 1;
 
     let mut i = exp as u32;
     let mut remainders = Vec::new();
     let mut seen = HashSet::new();
-    //let mut loop_idx = 0;
 
     while i > 0 {
         let remainder = (score * n as u64).rem_euclid(modulo as u64);
         if seen.contains(&remainder) {
-            //loop_idx = scores.iter().position(|&x| x == remainder).unwrap();
-            break;
+            return (remainders.iter().position(|&x| x == remainder), remainders);
         }
 
         seen.insert(remainder);
@@ -63,15 +79,36 @@ fn eni_with_cap(n: usize, exp: usize, modulo: usize, cap: Option<usize>) -> u64 
         i -= 1;
     }
 
-    let bound = cap.unwrap_or(exp);
+    (None, remainders)
+}
+
+fn sum_remainders(remainders: &[u64], iterations: usize, loops_pos: Option<usize>) -> u64 {
+    let loop_start = loops_pos.unwrap_or(0);
+    let prefix = remainders[0..loop_start].iter().sum::<u64>();
+
+    let mut leftover = iterations - loop_start;
+
+    let size = remainders.len() - loop_start;
+    let loops = (iterations - loop_start) / size;
+    let main = remainders[loop_start..].iter().sum::<u64>() * loops as u64;
+
+    leftover -= loops * size;
+
+    let suffix = remainders[loop_start..loop_start + leftover]
+        .iter()
+        .sum::<u64>();
+    prefix + main + suffix
+}
+
+fn get_last_remainders(cap: usize, remainders: &[u64], iterations: usize) -> u64 {
     let mut digit = 0;
-    let mut i = get_start_pos(bound, exp, seen.len());
+    let mut i = get_start_pos(cap, iterations, remainders.len());
 
     let mut result = 0;
     let mut j = 0;
 
-    while j < bound {
-        let remainder = remainders[i % seen.len()];
+    while j < cap {
+        let remainder = remainders[i % remainders.len()];
         if remainder == 0 {
             break;
         }
