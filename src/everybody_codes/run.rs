@@ -12,4 +12,5 @@ pub fn execute() {
 
     println!("Echoes of Enigmatus");
     echoes_of_enigmatus::Q1::run();
+    echoes_of_enigmatus::Q2::run();
 }
