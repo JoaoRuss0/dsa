@@ -1,5 +1,7 @@
+use crate::everybody_codes::echoes_of_enigmatus::Q2::Command::{Add, Swap};
 use std::cell::RefCell;
-use std::collections::VecDeque;
+use std::cmp::Ordering;
+use std::collections::{HashMap, VecDeque};
 use std::rc::Rc;
 
 pub fn run() {
@@ -8,18 +10,8 @@ pub fn run() {
     let mut path = "input/everybody_codes/echoes_of_enigmatus/Q2/P1.txt";
     let mut input = std::fs::read_to_string(path).unwrap();
 
-    let commands = input.lines().map(Command::parse).collect::<Vec<Command>>();
-
-    let mut commands_iter = commands.iter();
-
-    let first = commands_iter.next().unwrap();
-    let mut left = TreeNode::new(first.n_left.clone());
-    let mut right = TreeNode::new(first.n_right.clone());
-
-    for c in commands_iter {
-        left.add(TreeNode::new(c.n_left.clone()));
-        right.add(TreeNode::new(c.n_right.clone()));
-    }
+    let mut commands = input.lines().map(Command::parse).collect::<Vec<Command>>();
+    let (mut left, mut right) = apply_commands(&commands);
 
     println!(
         "  │  ├─ Part 1: {}{}",
@@ -35,6 +27,44 @@ pub fn run() {
     //path = "input/everybody_codes/echoes_of_enigmatus/Q2/P3.txt";
     //input = std::fs::read_to_string(path).unwrap();
     //println!("  │  └─ Part 3: {}", );
+}
+
+fn apply_commands(commands: &[Command]) -> (TreeNode, TreeNode) {
+    let mut left;
+    let mut right;
+
+    let mut additions = HashMap::new();
+
+    let mut commands_iter = commands.iter();
+    let first = commands_iter.next().unwrap();
+
+    match first {
+        Add(command) => {
+            left = TreeNode::new(command.left.clone());
+            right = TreeNode::new(command.right.clone());
+
+            additions.insert(command.id, command);
+        }
+        _ => panic!("Invalid first command, cannot swap empty trees"),
+    }
+
+    for c in commands_iter {
+        match c {
+            Add(command) => {
+                left.add(TreeNode::new(command.left.clone()));
+                right.add(TreeNode::new(command.right.clone()));
+
+                additions.insert(command.id, command);
+            }
+            Swap(id) => match additions.get(&id) {
+                Some(addition) => {}
+                None => panic!("Invalid swap command, no addition with id {} found", id),
+            },
+            _ => panic!("Invalid command"),
+        }
+    }
+
+    (left, right)
 }
 
 #[derive(Clone)]
@@ -61,12 +91,33 @@ impl TreeNode {
     }
 
     fn print(&self) {
-        if self.left.is_some() {
-            self.left.as_ref().unwrap().borrow().print();
-        }
-        print!("[{}, {}] ", self.details.rank, self.details.symbol);
-        if self.right.is_some() {
-            self.right.as_ref().unwrap().borrow().print();
+        print!("[{:>3}, {:>3}] ", self.details.rank, self.details.symbol);
+
+        let mut layer = VecDeque::new();
+        layer.push_back(self.left.clone());
+        layer.push_back(self.right.clone());
+
+        while !layer.is_empty() {
+            println!();
+            let mut next = VecDeque::new();
+
+            while let Some(node_opt) = layer.pop_front() {
+                match node_opt {
+                    Some(node) => {
+                        let borrowed = node.borrow();
+                        next.push_back(borrowed.left.clone());
+                        next.push_back(borrowed.right.clone());
+
+                        print!(
+                            "[{:>3}, {:>3}] ",
+                            borrowed.details.rank, borrowed.details.symbol
+                        );
+                    }
+                    None => print!("[   |   ]"),
+                }
+            }
+
+            layer = next;
         }
     }
 
@@ -105,7 +156,7 @@ impl TreeNode {
     }
 
     fn add(&mut self, node: TreeNode) {
-        let mut next = match self.details.rank < node.details.rank {
+        let next = match self.details.rank < node.details.rank {
             true => &mut self.right,
             false => &mut self.left,
         };
@@ -115,21 +166,66 @@ impl TreeNode {
             None => *next = Some(Rc::new(RefCell::new(node))),
         }
     }
+
+    fn find(
+        &mut self,
+        value: usize,
+        parent: Option<Rc<RefCell<TreeNode>>>,
+    ) -> (Rc<RefCell<TreeNode>>, Option<Rc<RefCell<TreeNode>>>) {
+        match self.details.rank.cmp(&value) {
+            Ordering::Less => match &self.left {
+                Some(n) => n
+                    .borrow_mut()
+                    .find(value, Some(Rc::new(RefCell::new(self.clone())))),
+                None => panic!("Value not found"),
+            },
+            Ordering::Equal => (Rc::new(RefCell::new(self.clone())), parent),
+            Ordering::Greater => match &self.right {
+                Some(n) => n
+                    .borrow_mut()
+                    .find(value, Some(Rc::new(RefCell::new(self.clone())))),
+                None => panic!("Value not found"),
+            },
+        }
+    }
+
+    fn swap(&mut self, other: Rc<RefCell<TreeNode>>) {}
 }
 
-struct Command {
-    id: usize,
-    n_left: TreeNodeDetails,
-    n_right: TreeNodeDetails,
+enum Command {
+    Add(AddCommand),
+    Swap(usize),
 }
 
 impl Command {
     fn parse(c_string: &str) -> Command {
         let split = c_string.split_whitespace().collect::<Vec<&str>>();
 
+        match split[0] {
+            "ADD" => AddCommand::parse(c_string),
+            _ => Swap(split[0].parse::<usize>().unwrap()),
+        }
+    }
+
+    fn apply() {
+        //let additions = HashMap::new();
+    }
+}
+
+struct AddCommand {
+    id: usize,
+    left: TreeNodeDetails,
+    right: TreeNodeDetails,
+}
+
+impl AddCommand {
+    fn parse(c_string: &str) -> Command {
+        let split = c_string.split_whitespace().collect::<Vec<&str>>();
+
         let id = split[1].split("=").collect::<Vec<&str>>()[1]
             .parse::<usize>()
             .unwrap();
+
         let n_left = split[2].split("=").collect::<Vec<&str>>()[1]
             .split(",")
             .collect::<Vec<&str>>();
@@ -143,16 +239,17 @@ impl Command {
         let r_rank = n_right[0][1..].parse::<usize>().unwrap();
         let r_symbol = n_right[1][0..n_right[1].len() - 1].chars().next().unwrap();
 
-        Command {
+        let command = AddCommand {
             id,
-            n_left: TreeNodeDetails {
+            left: TreeNodeDetails {
                 rank: l_rank,
                 symbol: l_symbol,
             },
-            n_right: TreeNodeDetails {
+            right: TreeNodeDetails {
                 rank: r_rank,
                 symbol: r_symbol,
             },
-        }
+        };
+        Command::Add(command)
     }
 }
