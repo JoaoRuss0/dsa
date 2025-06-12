@@ -40,6 +40,7 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
     let mut right;
 
     let mut additions = HashMap::new();
+    let mut swaps = HashMap::new();
 
     let mut commands_iter = commands.iter();
     let first = commands_iter.next().unwrap();
@@ -65,10 +66,18 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
                 }
                 Swap(id) => match additions.get(id) {
                     Some(addition) => {
+                        let swapped = *swaps.get(&id).unwrap_or(&false);
+
+                        let (t_left, t_right) = if swapped {
+                            (&right, &left)
+                        } else {
+                            (&left, &right)
+                        };
+
                         let (l_node, l_parent, l_is_left) =
-                            TreeNode::find(&left, addition.left.rank, None, true).unwrap();
+                            TreeNode::find(t_left, addition.left.rank, None, true).unwrap();
                         let (r_node, r_parent, r_is_left) =
-                            TreeNode::find(&right, addition.right.rank, None, false).unwrap();
+                            TreeNode::find(t_right, addition.right.rank, None, false).unwrap();
 
                         {
                             let mut l_borrowed = l_node.borrow_mut();
@@ -100,20 +109,16 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
                                 let temp = l_node.take();
                                 *l_node = r_node.take();
                                 *r_node = temp;
+
+                                swaps.insert(id, !swapped);
                             }
-                            (None, None) => left.swap(&right),
+                            (None, None) => t_left.swap(&t_right),
                             _ => panic!("Invalid swap command, cannot swap empty trees"),
                         }
                     }
                     None => panic!("Invalid swap command, no addition with id {} found", id),
                 },
             }
-
-            left.borrow().print();
-            println!();
-            right.borrow().print();
-            println!();
-            println!();
         }
     }
 
