@@ -24,10 +24,6 @@ pub fn run() {
     commands = input.lines().map(Command::parse).collect::<Vec<Command>>();
     let (mut left, mut right) = apply_commands(&commands);
 
-    left.borrow().print();
-    println!();
-    right.borrow().print();
-
     println!(
         "  │  ├─ Part 2: {}{}",
         left.borrow().largest_level(),
@@ -87,88 +83,37 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
                             r_borrowed.right = temp;
                         }
 
-                        let (left_updated, _, _) =
-                            TreeNode::find(&left, left.borrow().details.rank, None, true).unwrap();
-                        println!(
-                            "{} -> L:{} R:{}",
-                            left_updated.borrow().details.rank,
-                            left_updated
-                                .borrow()
-                                .left
-                                .clone()
-                                .unwrap()
-                                .borrow()
-                                .details
-                                .rank,
-                            left_updated
-                                .borrow()
-                                .right
-                                .clone()
-                                .unwrap()
-                                .borrow()
-                                .details
-                                .rank
-                        );
+                        match (l_parent, r_parent) {
+                            (Some(left), Some(right)) => {
+                                let l_node = if l_is_left {
+                                    &mut left.borrow_mut().left
+                                } else {
+                                    &mut left.borrow_mut().right
+                                };
 
-                        let (right_updated, _, _) =
-                            TreeNode::find(&right, right.borrow().details.rank, None, true)
-                                .unwrap();
-                        println!(
-                            "{} -> L:{} R:{}",
-                            right_updated.borrow().details.rank,
-                            right_updated
-                                .borrow()
-                                .left
-                                .clone()
-                                .unwrap()
-                                .borrow()
-                                .details
-                                .rank,
-                            right_updated
-                                .borrow()
-                                .right
-                                .clone()
-                                .unwrap()
-                                .borrow()
-                                .details
-                                .rank
-                        );
+                                let r_node = if r_is_left {
+                                    &mut right.borrow_mut().left
+                                } else {
+                                    &mut right.borrow_mut().right
+                                };
 
-                        match l_parent {
-                            Some(parent) => {
-                                let mut borrowed = parent.borrow_mut();
-                                match l_is_left {
-                                    true => borrowed.left = Some(l_node.clone()),
-                                    false => borrowed.right = Some(l_node.clone()),
-                                }
+                                let temp = l_node.take();
+                                *l_node = r_node.take();
+                                *r_node = temp;
                             }
-                            None => {
-                                let temp = left.clone();
-                                left = right;
-                                right = temp;
-
-                                left.borrow().print();
-                                println!();
-                                right.borrow().print();
-                                continue;
-                            }
+                            (None, None) => left.swap(&right),
+                            _ => panic!("Invalid swap command, cannot swap empty trees"),
                         }
-
-                        if let Some(parent) = r_parent {
-                            let mut borrowed = parent.borrow_mut();
-                            match r_is_left {
-                                true => borrowed.left = Some(r_node.clone()),
-                                false => borrowed.right = Some(r_node.clone()),
-                            }
-                        }
-
-                        left.borrow().print();
-                        println!();
-                        right.borrow().print();
                     }
                     None => panic!("Invalid swap command, no addition with id {} found", id),
                 },
             }
+
+            left.borrow().print();
+            println!();
+            right.borrow().print();
+            println!();
+            println!();
         }
     }
 
@@ -287,12 +232,17 @@ impl TreeNode {
             return Some((Rc::clone(node), parent, is_left));
         }
 
-        if let Some(r) = TreeNode::find(&Rc::clone(node), value, Some(Rc::clone(node)), true) {
-            return Some(r);
+        if let Some(left) = &borrowed.left {
+            if let Some(r) = TreeNode::find(&Rc::clone(left), value, Some(Rc::clone(node)), true) {
+                return Some(r);
+            }
         }
 
-        if let Some(r) = TreeNode::find(&Rc::clone(node), value, Some(Rc::clone(node)), false) {
-            return Some(r);
+        if let Some(right) = &borrowed.right {
+            if let Some(r) = TreeNode::find(&Rc::clone(right), value, Some(Rc::clone(node)), false)
+            {
+                return Some(r);
+            }
         }
 
         None
