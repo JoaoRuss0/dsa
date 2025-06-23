@@ -8,6 +8,6 @@ mod leetcode;
 
 fn main() {
     //codyssi::run::execute();
-    everybody_codes::run::execute();
-    //advent_of_code::run::execute();
+    //everybody_codes::run::execute();
+    advent_of_code::run::execute();
 }
