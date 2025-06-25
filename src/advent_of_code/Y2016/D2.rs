@@ -37,7 +37,7 @@ impl Pad {
     }
 
     fn apply(&mut self, directions: Vec<Direction>) -> usize {
-        let is_outside_grid = |x: i32, y: i32, grid: &Vec<Vec<usize>>, pos: &Position| {
+        let is_outside_grid = |x: i32, y: i32, grid: &Vec<Vec<usize>>| {
             x < 0 || y < 0 || x >= grid.len() as i32 || y >= grid[0].len() as i32
         };
 
@@ -47,7 +47,7 @@ impl Pad {
                 self.pos.y as i32 + d.offset().1,
             );
 
-            if is_outside_grid(nx, ny, &self.grid, &self.pos) {
+            if is_outside_grid(nx, ny, &self.grid) {
                 continue;
             }
 
