@@ -10,4 +10,5 @@ pub fn execute() {
 
     println!("Year 2016");
     Y2016::D1::run();
+    Y2016::D2::run();
 }
