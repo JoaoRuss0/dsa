@@ -1,4 +1,4 @@
-use crate::advent_of_code::{Y2016, Y2017, Y2018};
+use crate::advent_of_code::{Y2016, Y2017, Y2018, Y2019};
 
 pub fn execute() {
     //println!("Year 2015");
@@ -17,4 +17,7 @@ pub fn execute() {
 
     println!("Year 2018");
     Y2018::D1::run();
+
+    println!("Year 2019");
+    Y2019::D1::run();
 }
