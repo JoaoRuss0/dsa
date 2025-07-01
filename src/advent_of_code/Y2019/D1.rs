@@ -5,8 +5,23 @@ pub fn run() {
     let input = std::fs::read_to_string(path).unwrap();
 
     let masses = input.lines().map(|line| line.parse::<u32>().unwrap());
-    let fuel = masses.map(|m| m / 3 - 2).sum::<u32>();
+    let fuel = masses.map(|m| fuel(m) as u32).collect::<Vec<u32>>();
 
-    println!("  │  ├─ Part 1: {}", fuel);
-    //println!("  │  └─ Part 2: {}", );
+    println!("  │  ├─ Part 1: {}", fuel.iter().sum::<u32>());
+    println!(
+        "  │  └─ Part 2: {}",
+        fuel.into_iter().map(r_fuel).sum::<u32>()
+    );
+}
+
+fn fuel(mass: u32) -> i32 {
+    (mass as i32 / 3) - 2
+}
+
+fn r_fuel(mass: u32) -> u32 {
+    if fuel(mass) <= 0 {
+        return mass;
+    }
+
+    mass + r_fuel(fuel(mass) as u32)
 }
