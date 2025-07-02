@@ -17,5 +17,16 @@ pub fn run() {
     }
 
     println!("  │  ├─ Part 1: {}", increases);
-    //println!("  │  └─ Part 2: {}", );
+
+    increases = 0;
+    let mut last = depths[0] + depths[1] + depths[2];
+    for window in depths[1..].windows(3) {
+        let sum = window[0] + window[1] + window[2];
+        if sum > last {
+            increases += 1;
+        }
+        last = sum;
+    }
+
+    println!("  │  └─ Part 2: {}", increases);
 }
