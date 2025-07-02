@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 pub fn run() {
     println!("  ├─ Day 1 - Report Repair");
@@ -14,7 +14,7 @@ pub fn run() {
     let mut seen = HashSet::new();
     let mut mul = None;
 
-    for e in expenses {
+    for e in &expenses {
         if seen.contains(&(2020 - e)) {
             mul = Some(e * (2020 - e));
             break;
@@ -23,5 +23,24 @@ pub fn run() {
     }
 
     println!("  │  ├─ Part 1: {}", mul.unwrap());
-    //println!("  │  └─ Part 2: {}", );
+
+    let mut map: HashMap<u32, u32> = HashMap::new();
+    let mut res = None;
+    let size = expenses.len();
+
+    for i in 0..size {
+        for j in i + 1..size {
+            let diff = 2020 - (expenses[i] + expenses[j]) as i32;
+            if let Some(mul) = map.get(&expenses[j]) {
+                res = Some(mul * expenses[j]);
+                break;
+            }
+
+            if diff >= 0 {
+                map.insert(diff as u32, expenses[i] * expenses[j]);
+            }
+        }
+    }
+
+    println!("  │  └─ Part 2: {}", res.unwrap());
 }
