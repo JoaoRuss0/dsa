@@ -10,9 +10,7 @@ impl Solution {
         p: Option<Rc<RefCell<TreeNode>>>,
         q: Option<Rc<RefCell<TreeNode>>>,
     ) -> Option<Rc<RefCell<TreeNode>>> {
-        if root.is_none() {
-            return None;
-        }
+        root.as_ref()?;
 
         if root == p || root == q {
             return root;

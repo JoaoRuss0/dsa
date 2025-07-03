@@ -22,5 +22,5 @@ pub fn run() {
 
     println!("  │  ├─ Part 1: {}", prices.iter().sum::<u32>());
     println!("  │  ├─ Part 2: {}", prices.iter().skip(20).sum::<u32>());
-    println!("  │  └─ Part 3: {}", discount);
+    println!("  │  └─ Part 3: {discount}");
 }

@@ -26,6 +26,6 @@ pub fn run() {
         }
     }
 
-    println!("  │  ├─ Part 1: {}", sum);
+    println!("  │  ├─ Part 1: {sum}");
     println!("  │  └─ Part 2: {}", p_basement + 1);
 }

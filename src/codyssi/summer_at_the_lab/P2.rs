@@ -16,7 +16,7 @@ pub fn run() {
         .map(|(i, _)| i + 1)
         .sum::<usize>();
 
-    println!("  │  ├─ Part 1: {}", true_sensor_ids_sum);
+    println!("  │  ├─ Part 1: {true_sensor_ids_sum}");
 
     let get_gate_output = |(i, inputs): (usize, &[bool])| -> bool {
         match i % 2 == 0 {
@@ -32,7 +32,7 @@ pub fn run() {
         .filter(|&x| x)
         .count();
 
-    println!("  │  ├─ Part 2: {}", true_gate_output_count);
+    println!("  │  ├─ Part 2: {true_gate_output_count}");
 
     let mut true_gate_output_layer_count = 0;
     let mut layer = sensors.clone();

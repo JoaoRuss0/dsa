@@ -13,6 +13,7 @@ pub fn run() {
 
     println!("  │  ├─ Part 1: {}", changes.iter().sum::<i32>());
 
+    #[allow(unused_assignments)]
     let mut twice = None;
     let mut sum = 0;
     let mut seen = HashSet::new();

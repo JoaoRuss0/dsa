@@ -19,7 +19,7 @@ pub fn run() {
         .map(|i| p.apply(i))
         .collect::<Vec<usize>>();
 
-    println!("  │  ├─ Part 1: {:?}", values);
+    println!("  │  ├─ Part 1: {values:?}");
     //println!("  │  └─ Part 2: {}", );
 }
 

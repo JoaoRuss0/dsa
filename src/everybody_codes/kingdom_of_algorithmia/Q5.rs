@@ -72,14 +72,14 @@ fn part2(dance_floor: &mut [Vec<u32>], shouts: usize) -> u64 {
     n * i as u64
 }
 
-fn part3(dance_floor: &mut Vec<Vec<u32>>) -> u64 {
+fn part3(dance_floor: &mut [Vec<u32>]) -> u64 {
     let mut seen = HashSet::new();
     let mut max = u64::MIN;
     let len = dance_floor.len();
 
     let mut i = 0;
     loop {
-        if seen.insert(dance_floor.clone()) {
+        if seen.insert(dance_floor.to_owned()) {
             max = max.max(dance(dance_floor, i % len));
             i += 1;
             continue;

@@ -54,5 +54,5 @@ pub fn run() {
         }
     }
 
-    println!("     └─ Part 3: {}", time);
+    println!("     └─ Part 3: {time}");
 }

@@ -10,7 +10,7 @@ pub fn run() {
     let mut input = std::fs::read_to_string(path).unwrap();
 
     let mut commands = input.lines().map(Command::parse).collect::<Vec<Command>>();
-    let (mut left, mut right) = apply_commands(&commands);
+    let (left, right) = apply_commands(&commands);
 
     println!(
         "  │  ├─ Part 1: {}{}",
@@ -22,7 +22,7 @@ pub fn run() {
     input = std::fs::read_to_string(path).unwrap();
 
     commands = input.lines().map(Command::parse).collect::<Vec<Command>>();
-    let (mut left, mut right) = apply_commands(&commands);
+    let (left, right) = apply_commands(&commands);
 
     println!(
         "  │  ├─ Part 2: {}{}",
@@ -36,8 +36,8 @@ pub fn run() {
 }
 
 fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<TreeNode>>) {
-    let mut left;
-    let mut right;
+    let left;
+    let right;
 
     let mut additions = HashMap::new();
     let mut swaps = HashMap::new();
@@ -74,14 +74,14 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
                             (&left, &right)
                         };
 
-                        let (l_node, l_parent, l_is_left) =
+                        let found_left =
                             TreeNode::find(t_left, addition.left.rank, None, true).unwrap();
-                        let (r_node, r_parent, r_is_left) =
+                        let found_right =
                             TreeNode::find(t_right, addition.right.rank, None, false).unwrap();
 
                         {
-                            let mut l_borrowed = l_node.borrow_mut();
-                            let mut r_borrowed = r_node.borrow_mut();
+                            let mut l_borrowed = found_left.node.borrow_mut();
+                            let mut r_borrowed = found_right.node.borrow_mut();
 
                             let mut temp = l_borrowed.left.take();
                             l_borrowed.left = r_borrowed.left.take();
@@ -92,15 +92,15 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
                             r_borrowed.right = temp;
                         }
 
-                        match (l_parent, r_parent) {
+                        match (found_left.parent, found_right.parent) {
                             (Some(left), Some(right)) => {
-                                let l_node = if l_is_left {
+                                let l_node = if found_left.is_left {
                                     &mut left.borrow_mut().left
                                 } else {
                                     &mut left.borrow_mut().right
                                 };
 
-                                let r_node = if r_is_left {
+                                let r_node = if found_right.is_left {
                                     &mut right.borrow_mut().left
                                 } else {
                                     &mut right.borrow_mut().right
@@ -112,7 +112,7 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
 
                                 swaps.insert(id, !swapped);
                             }
-                            (None, None) => t_left.swap(&t_right),
+                            (None, None) => t_left.swap(t_right),
                             _ => panic!("Invalid swap command, cannot swap empty trees"),
                         }
                     }
@@ -126,7 +126,7 @@ fn apply_commands(commands: &[Command]) -> (Rc<RefCell<TreeNode>>, Rc<RefCell<Tr
 }
 
 #[derive(Clone)]
-struct TreeNodeDetails {
+pub struct TreeNodeDetails {
     rank: usize,
     symbol: char,
 }
@@ -230,11 +230,15 @@ impl TreeNode {
         value: usize,
         parent: Option<Rc<RefCell<TreeNode>>>,
         is_left: bool,
-    ) -> Option<(Rc<RefCell<TreeNode>>, Option<Rc<RefCell<TreeNode>>>, bool)> {
+    ) -> Option<FoundNode> {
         let borrowed = node.borrow();
 
         if borrowed.details.rank == value {
-            return Some((Rc::clone(node), parent, is_left));
+            return Some(FoundNode {
+                node: Rc::clone(node),
+                parent,
+                is_left,
+            });
         }
 
         if let Some(left) = &borrowed.left {
@@ -252,6 +256,12 @@ impl TreeNode {
 
         None
     }
+}
+
+struct FoundNode {
+    node: Rc<RefCell<TreeNode>>,
+    parent: Option<Rc<RefCell<TreeNode>>>,
+    is_left: bool,
 }
 
 enum Command {

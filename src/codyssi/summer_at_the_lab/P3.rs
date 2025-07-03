@@ -10,7 +10,7 @@ pub fn run() {
         .map(|(_, base)| base.parse::<usize>().unwrap())
         .sum();
 
-    println!("  │  ├─ Part 1: {}", base_sum);
+    println!("  │  ├─ Part 1: {base_sum}");
 
     let sum = input
         .lines()
@@ -18,7 +18,7 @@ pub fn run() {
         .map(|(reading, base)| i64::from_str_radix(reading, base.parse::<u32>().unwrap()).unwrap())
         .sum::<i64>();
 
-    println!("  │  ├─ Part 2: {}", sum);
+    println!("  │  ├─ Part 2: {sum}");
 
     let base65 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#";
 

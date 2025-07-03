@@ -15,7 +15,7 @@ pub fn run() {
         corrected += correction.parse::<i64>().unwrap();
     }
 
-    println!("  │  ├─ Part 1: {}", corrected);
+    println!("  │  ├─ Part 1: {corrected}");
 
     let mut corrected_rev = offset;
     for i in (0..=operations.len() - 1).rev() {
@@ -24,7 +24,7 @@ pub fn run() {
         corrected_rev += correction.parse::<i64>().unwrap();
     }
 
-    println!("  │  ├─ Part 2: {}", corrected_rev);
+    println!("  │  ├─ Part 2: {corrected_rev}");
 
     let mut corrected_rev_two_digit = (lines[0].to_string() + lines[1]).parse::<i64>().unwrap();
 
@@ -39,5 +39,5 @@ pub fn run() {
         corrected_rev_two_digit += correction.parse::<i64>().unwrap();
     }
 
-    println!("  │  └─ Part 3: {}", corrected_rev_two_digit);
+    println!("  │  └─ Part 3: {corrected_rev_two_digit}");
 }

@@ -8,7 +8,7 @@ pub fn run() {
 
     let word_count = get_word_count_in_inscription(words, sections[0].to_string());
 
-    println!("  │  ├─ Part 1: {}", word_count);
+    println!("  │  ├─ Part 1: {word_count}");
 
     (words, sections) =
         read_file("input/everybody_codes/kingdom_of_algorithmia/Q2/P2.txt".to_string());
@@ -17,7 +17,7 @@ pub fn run() {
     let mut symbol_count =
         get_in_matrix_inscription(words, matrix, false, vec![search_forward, search_backwards]);
 
-    println!("  │  ├─ Part 2: {}", symbol_count);
+    println!("  │  ├─ Part 2: {symbol_count}");
 
     (words, sections) =
         read_file("input/everybody_codes/kingdom_of_algorithmia/Q2/P3.txt".to_string());
@@ -43,7 +43,7 @@ pub fn run() {
             wrapped_upwards_search,
         ],
     );
-    println!("  │  └─ Part 3: {}", symbol_count);
+    println!("  │  └─ Part 3: {symbol_count}");
 }
 
 fn read_file(path: String) -> (HashMap<char, Vec<String>>, Vec<String>) {

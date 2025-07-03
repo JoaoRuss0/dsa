@@ -23,7 +23,7 @@ pub fn run() {
         .map(|r| get_range(r).len() as i64)
         .sum::<i64>();
 
-    println!("  │  ├─ Part 1: {}", count);
+    println!("  │  ├─ Part 1: {count}");
 
     let pile_count = piles
         .clone()
@@ -35,7 +35,7 @@ pub fn run() {
         })
         .sum::<i64>();
 
-    println!("  │  ├─ Part 2: {}", pile_count);
+    println!("  │  ├─ Part 2: {pile_count}");
 
     let adjacent_piles_count = piles
         .clone()
@@ -50,5 +50,5 @@ pub fn run() {
         .max()
         .unwrap();
 
-    println!("  │  └─ Part 3: {}", adjacent_piles_count);
+    println!("  │  └─ Part 3: {adjacent_piles_count}");
 }

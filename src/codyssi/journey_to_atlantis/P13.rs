@@ -52,7 +52,7 @@ pub fn run() {
         }
     }
 
-    println!("  │  └─ Part 3: {}", priciest_cycle);
+    println!("  │  └─ Part 3: {priciest_cycle}");
 }
 
 fn get_paths_for_key(

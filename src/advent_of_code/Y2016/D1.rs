@@ -1,13 +1,12 @@
 use crate::advent_of_code::Y2016::D1::Direction::*;
 use std::collections::HashSet;
-use std::fmt::Display;
 
 pub fn run() {
     println!("  ├─ Day 1 - No Time for a Taxicab");
 
     let path = "input/advent_of_code/Y2016/D1.txt";
     let input = std::fs::read_to_string(path).unwrap();
-    let mut instructions = get_instructions(&input);
+    let instructions = get_instructions(&input);
 
     let mut p = Pose {
         pos: Position::new(),
@@ -127,7 +126,7 @@ impl Position {
         for _ in 0..times {
             self.x += x;
             self.y += y;
-            positions.push(self.clone());
+            positions.push(*self);
         }
 
         positions

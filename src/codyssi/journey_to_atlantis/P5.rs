@@ -66,5 +66,5 @@ pub fn run() {
     }
     distance_sum += distance(current, to_visit[0]);
 
-    println!("  │  └─ Part 3: {}", distance_sum);
+    println!("  │  └─ Part 3: {distance_sum}");
 }

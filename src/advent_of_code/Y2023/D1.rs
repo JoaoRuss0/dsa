@@ -18,7 +18,7 @@ fn calibrate(l: &str, convert: fn(char, &str) -> Option<u32>) -> u32 {
     let mut first = None;
     let mut last = None;
 
-    let mut chars = l.chars().collect::<Vec<char>>();
+    let chars = l.chars().collect::<Vec<char>>();
     for i in 0..l.len() {
         let digit = convert(chars[i], &l[i..]);
         if digit.is_none() {

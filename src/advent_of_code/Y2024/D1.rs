@@ -34,7 +34,7 @@ pub fn run() {
 
     let similarity = left
         .iter()
-        .map(|l| match map.get(&l) {
+        .map(|l| match map.get(l) {
             Some(&count) => l * count,
             None => 0,
         })

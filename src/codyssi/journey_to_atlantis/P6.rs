@@ -23,7 +23,7 @@ pub fn run() {
 
     let sum: u64 = uncorrupted.iter().map(value).sum();
 
-    println!("  │  ├─ Part 2: {}", sum);
+    println!("  │  ├─ Part 2: {sum}");
 
     let correct = |previous_value: u64| -> u64 {
         let corrected: i64 = previous_value as i64 * 2 - 5;
@@ -46,5 +46,5 @@ pub fn run() {
         previous_value = new_value;
     }
 
-    println!("  │  └─ Part 3: {}", original_value);
+    println!("  │  └─ Part 3: {original_value}");
 }

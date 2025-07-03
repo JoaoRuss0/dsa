@@ -27,13 +27,13 @@ pub fn run() {
 
     for i in 0..grid[0].len() {
         let mut current = 0;
-        for j in 0..grid.len() {
-            current += grid[j][i];
+        for row in grid.iter() {
+            current += row[i];
         }
         safest = safest.min(current);
     }
 
-    println!("  │  ├─ Part 1: {}", safest);
+    println!("  │  ├─ Part 1: {safest}");
     println!(
         "  │  ├─ Part 2: {}",
         find_safest_path(&grid, (0, 0), (14, 14))

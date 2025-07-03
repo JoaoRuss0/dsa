@@ -16,7 +16,7 @@ pub fn run() {
         }
     }
 
-    println!("  │  ├─ Part 1: {}", increases);
+    println!("  │  ├─ Part 1: {increases}");
 
     increases = 0;
     let mut last = depths[0] + depths[1] + depths[2];
@@ -28,5 +28,5 @@ pub fn run() {
         last = sum;
     }
 
-    println!("  │  └─ Part 2: {}", increases);
+    println!("  │  └─ Part 2: {increases}");
 }

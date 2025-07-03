@@ -42,6 +42,6 @@ pub fn run() {
         bow_len += volume(dimensions) + side_perimeter(smallest_dims);
     });
 
-    println!("  │  ├─ Part 1: {}", wrap_area);
-    println!("  │  └─ Part 2: {}", bow_len);
+    println!("  │  ├─ Part 1: {wrap_area}");
+    println!("  │  └─ Part 2: {bow_len}");
 }

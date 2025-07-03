@@ -102,7 +102,7 @@ fn apply_instructions(grid: &mut [Vec<i64>], instructions: &Vec<Instruction>) {
                 _ => {
                     for i in 0..grid.len() {
                         for j in 0..grid[i].len() {
-                            apply_non_shift_operation(&instruction, i, j, grid)
+                            apply_non_shift_operation(instruction, i, j, grid)
                         }
                     }
                 }

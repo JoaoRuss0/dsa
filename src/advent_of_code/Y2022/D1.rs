@@ -12,7 +12,7 @@ pub fn run() {
 
     println!("  │  ├─ Part 1: {}", calories.iter().max().unwrap());
 
-    calories.sort_by(|a, b| b.cmp(&a));
+    calories.sort_by(|a, b| b.cmp(a));
     println!(
         "  │  └─ Part 2: {}",
         calories[0] + calories[1] + calories[2]
