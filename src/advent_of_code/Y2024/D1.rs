@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 pub fn run() {
     println!("  ├─ Day 1 - Historian Hysteria");
 
@@ -22,6 +24,21 @@ pub fn run() {
         .map(|(&l, &r)| l.abs_diff(r))
         .sum::<u32>();
 
-    println!("  │  ├─ Part 1: {}", diffs);
-    //println!("  │  └─ Part 2: {}", );
+    println!("  │  ├─ Part 1: {diffs}");
+
+    let mut map = HashMap::new();
+    for i in right {
+        map.entry(i).or_insert(0);
+        *map.get_mut(&i).unwrap() += 1;
+    }
+
+    let similarity = left
+        .iter()
+        .map(|l| match map.get(&l) {
+            Some(&count) => l * count,
+            None => 0,
+        })
+        .sum::<u32>();
+
+    println!("  │  └─ Part 2: {similarity}");
 }
