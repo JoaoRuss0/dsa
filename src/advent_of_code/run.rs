@@ -35,4 +35,5 @@ pub fn execute() {
 
     println!("Year 2024");
     Y2024::D1::run();
+    Y2024::D2::run();
 }
