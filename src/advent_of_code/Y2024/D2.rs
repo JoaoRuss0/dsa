@@ -1,5 +1,3 @@
-use std::hash::Hash;
-
 pub fn run() {
     println!("  ├─ Day 2 - Red-Nosed Reports");
 
@@ -17,15 +15,22 @@ pub fn run() {
 
     println!(
         "  │  ├─ Part 1: {}",
-        reports.clone().into_iter().filter(is_safe).count()
+        reports
+            .clone()
+            .into_iter()
+            .filter(|report| is_safe(report))
+            .count()
     );
     println!(
         "  │  └─ Part 2: {}",
-        reports.into_iter().filter(is_safe_dampener).count()
+        reports
+            .into_iter()
+            .filter(|report| is_safe_dampener(report))
+            .count()
     );
 }
 
-fn calc_diff(report: &Vec<i32>) -> Vec<i32> {
+fn calc_diff(report: &[i32]) -> Vec<i32> {
     let mut diffs = Vec::new();
 
     for (i, level) in report.iter().enumerate().skip(1) {
@@ -35,10 +40,11 @@ fn calc_diff(report: &Vec<i32>) -> Vec<i32> {
     diffs
 }
 
-fn is_safe(report: &Vec<i32>) -> bool {
+fn is_safe(report: &[i32]) -> bool {
     let mut increasing = None;
+    let diffs = calc_diff(report);
 
-    for &diff in calc_diff(report).iter() {
+    for &diff in diffs.iter() {
         if diff.abs() < 1 || diff.abs() > 3 {
             return false;
         }
@@ -56,13 +62,13 @@ fn is_safe(report: &Vec<i32>) -> bool {
     true
 }
 
-fn is_safe_dampener(report: &Vec<i32>) -> bool {
+fn is_safe_dampener(report: &[i32]) -> bool {
     if is_safe(report) {
         return true;
     }
 
     for i in 0..report.len() {
-        let mut new = report.clone();
+        let mut new = report.to_owned();
         new.remove(i);
 
         if is_safe(&new) {
