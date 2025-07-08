@@ -7,9 +7,10 @@ pub fn run() {
     let grid = Grid::parse(&input);
 
     println!("  │  ├─ Part 1: {}", grid.matches("XMAS"));
-    //println!("  │  └─ Part 2: {}", );
+    println!("  │  └─ Part 2: {}", grid.cross_matches("MAS"));
 }
 
+#[derive(Debug, Copy, Clone)]
 enum Direction {
     North,
     NorthEast,
@@ -47,6 +48,13 @@ impl Direction {
             Direction::NorthWest,
         ]
     }
+
+    fn diagonals() -> [(Direction, Direction); 2] {
+        [
+            (Direction::NorthEast, Direction::SouthWest),
+            (Direction::NorthWest, Direction::SouthEast),
+        ]
+    }
 }
 
 struct Grid {
@@ -60,12 +68,49 @@ impl Grid {
         Grid { inner: grid }
     }
 
-    fn matches(&self, term: &str) -> usize {
+    fn cross_matches(&self, term: &str) -> usize {
+        let middle = term.chars().nth(term.len() / 2).unwrap();
         let mut count = 0;
 
         for i in 0..self.inner.len() {
             for (j, &c) in self.inner.get(i).unwrap().into_iter().enumerate() {
-                if c != term.chars().next().unwrap() {
+                if c != middle {
+                    continue;
+                }
+
+                let first_half: String = term[..=term.len() / 2].chars().rev().collect();
+                let second_half = &term[term.len() / 2..];
+
+                let mut matches = 0;
+
+                for diagonal in Direction::diagonals() {
+                    if self.search_pos_in_direction(i, j, diagonal.0, second_half)
+                        && self.search_pos_in_direction(i, j, diagonal.1, &first_half)
+                    {
+                        matches += 1;
+                    } else if self.search_pos_in_direction(i, j, diagonal.0, &first_half)
+                        && self.search_pos_in_direction(i, j, diagonal.1, second_half)
+                    {
+                        matches += 1;
+                    }
+                }
+
+                if matches >= 2 {
+                    count += 1;
+                }
+            }
+        }
+
+        count
+    }
+
+    fn matches(&self, term: &str) -> usize {
+        let first = term.chars().next().unwrap();
+        let mut count = 0;
+
+        for i in 0..self.inner.len() {
+            for (j, &c) in self.inner.get(i).unwrap().into_iter().enumerate() {
+                if c != first {
                     continue;
                 }
 
