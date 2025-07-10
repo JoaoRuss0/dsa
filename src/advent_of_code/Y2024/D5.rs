@@ -27,25 +27,61 @@ pub fn run() {
         })
         .collect::<Vec<Vec<usize>>>();
 
-    let correct = updates
+    let (correct, incorrect): (Vec<Vec<usize>>, Vec<Vec<usize>>) = updates
         .into_iter()
-        .filter(|u| {
-            for i in 0..u.len() - 1 {
-                for j in i..u.len() {
-                    if let Some(after_next) = rules.get(&u[j]) {
-                        if after_next.contains(&u[i]) {
-                            return false;
-                        }
-                    }
+        .partition(|u| correctly_ordered(u, &rules));
+
+    println!("  │  ├─ Part 1: {}", middles(correct));
+
+    let corrected = incorrect
+        .iter()
+        .map(|u| order(u.to_vec(), &rules))
+        .collect();
+
+    println!("  │  └─ Part 2: {}", middles(corrected));
+}
+
+fn middles(updates: Vec<Vec<usize>>) -> usize {
+    updates.iter().map(|u| u[u.len() / 2]).sum::<usize>()
+}
+
+fn correctly_ordered(update: &Vec<usize>, rules: &HashMap<usize, HashSet<usize>>) -> bool {
+    for i in 0..update.len() - 1 {
+        for j in i..update.len() {
+            if let Some(after_next) = rules.get(&update[j]) {
+                if after_next.contains(&update[i]) {
+                    return false;
                 }
             }
-            true
-        })
-        .collect::<Vec<Vec<usize>>>();
+        }
+    }
 
-    println!(
-        "  │  ├─ Part 1: {}",
-        correct.iter().map(|u| u[u.len() / 2]).sum::<usize>()
-    );
-    //println!("  │  └─ Part 2: {}", );
+    true
+}
+
+fn order(update: Vec<usize>, rules: &HashMap<usize, HashSet<usize>>) -> Vec<usize> {
+    let mut update = update;
+
+    let mut i = 0;
+
+    while i < update.len() - 1 {
+        let mut j = i + 1;
+        let mut re_check = false;
+        while j < update.len() {
+            if let Some(after_next) = rules.get(&update[j]) {
+                if after_next.contains(&update[i]) {
+                    update.swap(i, j);
+                    re_check = true;
+                    break;
+                }
+            }
+            j += 1;
+        }
+
+        if !re_check {
+            i += 1;
+        }
+    }
+
+    update
 }
