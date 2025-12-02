@@ -151,16 +151,15 @@ fn parse(input: String) -> (Vec<Vec<char>>, Point) {
     for (x, line) in input.lines().enumerate() {
         grid.push(Vec::new());
 
-        for (y, char) in line.chars().enumerate() {
-            let mut char = char;
-            if char == '^' {
+        for (y, c) in line.chars().enumerate() {
+            if c == '^' {
                 start = Some(Point {
                     x: x as i32,
                     y: y as i32,
                 });
             }
 
-            grid.last_mut().unwrap().push(char);
+            grid.last_mut().unwrap().push(c);
         }
     }
 
