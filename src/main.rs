@@ -4,10 +4,12 @@
 mod advent_of_code;
 mod codyssi;
 mod everybody_codes;
+mod flip_flop;
 mod leetcode;
 
 fn main() {
     //codyssi::run::execute();
     //everybody_codes::run::execute();
-    advent_of_code::run::execute();
+    //advent_of_code::run::execute();
+    flip_flop::run::execute();
 }
