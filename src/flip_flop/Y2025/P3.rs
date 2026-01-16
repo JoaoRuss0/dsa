@@ -29,8 +29,29 @@ pub fn run() {
             .unwrap()
             .0
     );
-    //println!("  │  ├─ Part 2: {}",);
+
+    println!(
+        "  │  ├─ Part 2: {}",
+        bushes
+            .iter()
+            .filter(|b| b.category == Category::GREEN)
+            .count()
+    );
     //println!("  │  └─ Part 3: {}",);
+}
+
+#[derive(Debug, Eq)]
+enum Category {
+    RED,
+    GREEN,
+    BLUE,
+    SPECIAL,
+}
+
+impl PartialEq<Self> for Category {
+    fn eq(&self, other: &Self) -> bool {
+        std::mem::discriminant(self) == std::mem::discriminant(other)
+    }
 }
 
 #[derive(Eq, Debug)]
@@ -38,14 +59,28 @@ struct RGB {
     r: u16,
     g: u16,
     b: u16,
+    category: Category,
 }
 
 impl RGB {
     fn new(r: &str, g: &str, b: &str) -> Self {
+        let category: Category;
+
+        if r == g || r == b || g == b {
+            category = Category::SPECIAL
+        } else if r > g && r > b {
+            category = Category::RED
+        } else if g > r && g > b {
+            category = Category::GREEN
+        } else {
+            category = Category::RED
+        }
+
         Self {
             r: r.parse::<u16>().unwrap(),
             g: g.parse::<u16>().unwrap(),
             b: b.parse::<u16>().unwrap(),
+            category,
         }
     }
 }
