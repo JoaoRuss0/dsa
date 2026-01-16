@@ -37,7 +37,14 @@ pub fn run() {
             .filter(|b| b.category == Category::GREEN)
             .count()
     );
-    //println!("  │  └─ Part 3: {}",);
+
+    println!(
+        "  │  └─ Part 3: {}",
+        bushes
+            .iter()
+            .map(|b| b.category.pointers() as u64)
+            .sum::<u64>()
+    );
 }
 
 #[derive(Debug, Eq)]
@@ -46,6 +53,17 @@ enum Category {
     GREEN,
     BLUE,
     SPECIAL,
+}
+
+impl Category {
+    fn pointers(&self) -> u8 {
+        match self {
+            Category::RED => 5,
+            Category::GREEN => 2,
+            Category::BLUE => 4,
+            Category::SPECIAL => 10,
+        }
+    }
 }
 
 impl PartialEq<Self> for Category {
@@ -73,7 +91,7 @@ impl RGB {
         } else if g > r && g > b {
             category = Category::GREEN
         } else {
-            category = Category::RED
+            category = Category::BLUE
         }
 
         Self {
