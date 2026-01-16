@@ -4,7 +4,7 @@ pub fn run() {
     let path = "input/flip_flop/Y2025/P4.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
-    let trash = input
+    let mut trash = input
         .lines()
         .map(|l| {
             let split = l.split_once(",").unwrap();
@@ -15,13 +15,16 @@ pub fn run() {
         })
         .collect::<Vec<Point>>();
 
-    let mut steps = walk(&trash, |x, y| x.step(y));
+    let mut steps = walk(&trash, |x, y| x.step_manhattan(y));
     println!("  │  ├─ Part 1: {}", steps);
 
     steps = walk(&trash, |x, y| x.step_diagonally(y));
     println!("  │  ├─ Part 2: {}", steps);
 
-    //println!("  │  └─ Part 3: {}",);
+    let origin = Point { x: 0, y: 0 };
+    trash.sort_by(|a, b| origin.step_manhattan(a).cmp(&origin.step_manhattan(b)));
+    steps = walk(&trash, |x, y| x.step_diagonally(y));
+    println!("  │  └─ Part 3: {}", steps);
 }
 
 struct Point {
@@ -30,7 +33,7 @@ struct Point {
 }
 
 impl Point {
-    fn step(&self, next: &Point) -> u8 {
+    fn step_manhattan(&self, next: &Point) -> u8 {
         self.x.abs_diff(next.x) + self.y.abs_diff(next.y)
     }
 
