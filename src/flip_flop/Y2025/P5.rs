@@ -10,14 +10,16 @@ pub fn run() {
     let mut tunnels: HashMap<char, Tunnel> = HashMap::new();
     build_network(&mut tunnels, &sequence);
 
-    let (steps, unvisited) = walk(&sequence, &tunnels);
+    let (steps, steps_powered, unvisited) = walk(&sequence, &tunnels);
 
     println!("  │  ├─ Part 1: {}", steps);
     println!("  │  ├─ Part 2: {}", unvisited.iter().collect::<String>());
-    //println!("  │  └─ Part 3: {}",);
+    println!("  │  └─ Part 3: {}", steps_powered);
 }
 
 struct Tunnel {
+    id: char,
+    powered: bool,
     start: usize,
     end: usize,
     length: usize,
@@ -26,8 +28,10 @@ struct Tunnel {
 }
 
 impl Tunnel {
-    fn new(start: usize) -> Self {
+    fn new(id: char, start: usize) -> Self {
         Self {
+            id,
+            powered: id.is_uppercase(),
             start,
             end: 0,
             length: 0,
@@ -57,7 +61,7 @@ fn build_network(tunnels: &mut HashMap<char, Tunnel>, sequence: &[char]) {
                 tunnel.close(i);
             }
             None => {
-                tunnels.insert(c, Tunnel::new(i));
+                tunnels.insert(c, Tunnel::new(c, i));
             }
         }
 
@@ -73,8 +77,9 @@ fn build_network(tunnels: &mut HashMap<char, Tunnel>, sequence: &[char]) {
     }
 }
 
-fn walk(sequence: &[char], tunnels: &HashMap<char, Tunnel>) -> (usize, Vec<char>) {
+fn walk(sequence: &[char], tunnels: &HashMap<char, Tunnel>) -> (usize, i32, Vec<char>) {
     let mut steps = 0;
+    let mut steps_powered = 0;
     let mut next = 0;
 
     let mut visited: HashSet<char> = HashSet::new();
@@ -84,9 +89,18 @@ fn walk(sequence: &[char], tunnels: &HashMap<char, Tunnel>) -> (usize, Vec<char>
         let tunnel = tunnels.get(&sequence[next]).unwrap();
         next = tunnel.exit(next) + 1;
         steps += tunnel.length;
+        steps_powered += if tunnel.powered {
+            -(tunnel.length as i32)
+        } else {
+            tunnel.length as i32
+        };
     }
 
-    (steps, get_ordered_difference(sequence, &visited))
+    (
+        steps,
+        steps_powered,
+        get_ordered_difference(sequence, &visited),
+    )
 }
 
 fn get_ordered_difference(A: &[char], B: &HashSet<char>) -> Vec<char> {
