@@ -9,8 +9,8 @@ pub fn run() {
         .map(|l| {
             let split = l.split_once(',').unwrap();
             (
-                split.0.parse::<i32>().unwrap(),
-                split.1.parse::<i32>().unwrap(),
+                split.0.parse::<i64>().unwrap(),
+                split.1.parse::<i64>().unwrap(),
             )
         })
         .map(|(x, y)| Bird::new(x, y))
@@ -35,7 +35,17 @@ pub fn run() {
             })
             .sum::<u64>()
     );
-    //println!("  │  └─ Part 3: {}", );
+
+    simulation.reset();
+    println!(
+        "  │  └─ Part 3: {}",
+        (0..1000)
+            .map(|_| {
+                simulation.simulate(31556926);
+                simulation.snap_picture() as u64
+            })
+            .sum::<u64>()
+    );
 }
 
 struct Simulation {
@@ -50,7 +60,7 @@ impl Simulation {
 
     fn step(&mut self, steps: usize) {
         for bird in &mut self.birds {
-            let mut new_position = bird.next_steps(steps as i32);
+            let mut new_position = bird.next_steps(steps as i64);
             self.grid.wrap(&mut new_position);
             bird.position = new_position;
         }
@@ -73,8 +83,8 @@ impl Simulation {
 }
 
 struct Grid {
-    height: i32,
-    width: i32,
+    height: i64,
+    width: i64,
 }
 
 impl Grid {
@@ -101,20 +111,20 @@ impl Grid {
 
 #[derive(Clone)]
 struct Point {
-    x: i32,
-    y: i32,
+    x: i64,
+    y: i64,
 }
 
 impl Point {
-    fn add(&mut self, vector: &Vector, scalar: i32) {
+    fn add(&mut self, vector: &Vector, scalar: i64) {
         self.x = self.x + (vector.x * scalar);
         self.y = self.y + (vector.y * scalar);
     }
 }
 
 struct Vector {
-    x: i32,
-    y: i32,
+    x: i64,
+    y: i64,
 }
 
 struct Bird {
@@ -123,7 +133,7 @@ struct Bird {
 }
 
 impl Bird {
-    fn new(speed_x: i32, speed_y: i32) -> Self {
+    fn new(speed_x: i64, speed_y: i64) -> Self {
         Self {
             position: Point { x: 0, y: 0 },
             speed: Vector {
@@ -133,7 +143,7 @@ impl Bird {
         }
     }
 
-    fn next_steps(&mut self, scalar: i32) -> Point {
+    fn next_steps(&mut self, scalar: i64) -> Point {
         let mut new = self.position.clone();
         new.add(&self.speed, scalar);
         new
