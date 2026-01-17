@@ -9,8 +9,8 @@ pub fn run() {
         .map(|l| {
             let split = l.split_once(',').unwrap();
             (
-                split.0.parse::<i16>().unwrap(),
-                split.1.parse::<i16>().unwrap(),
+                split.0.parse::<i32>().unwrap(),
+                split.1.parse::<i32>().unwrap(),
             )
         })
         .map(|(x, y)| Bird::new(x, y))
@@ -23,9 +23,18 @@ pub fn run() {
 
     let mut simulation = Simulation::new(grid, birds);
     simulation.simulate(100);
-
     println!("  │  ├─ Part 1: {}", simulation.snap_picture());
-    //println!("  │  ├─ Part 2: {}", );
+
+    simulation.reset();
+    println!(
+        "  │  ├─ Part 2: {}",
+        (0..1000)
+            .map(|_| {
+                simulation.simulate(3600);
+                simulation.snap_picture() as u64
+            })
+            .sum::<u64>()
+    );
     //println!("  │  └─ Part 3: {}", );
 }
 
@@ -39,18 +48,16 @@ impl Simulation {
         Self { grid, birds }
     }
 
-    fn step(&mut self) {
+    fn step(&mut self, steps: usize) {
         for bird in &mut self.birds {
-            let mut new_position = bird.next_step();
+            let mut new_position = bird.next_steps(steps as i32);
             self.grid.wrap(&mut new_position);
             bird.position = new_position;
         }
     }
 
     fn simulate(&mut self, steps: usize) {
-        for _ in 0..steps {
-            self.step();
-        }
+        self.step(steps);
     }
 
     fn snap_picture(&self) -> usize {
@@ -59,18 +66,18 @@ impl Simulation {
             .filter(|b| self.grid.is_in_center(&b.position))
             .count()
     }
+
+    fn reset(&mut self) {
+        self.birds.iter_mut().for_each(Bird::reset);
+    }
 }
 
 struct Grid {
-    height: i16,
-    width: i16,
+    height: i32,
+    width: i32,
 }
 
 impl Grid {
-    fn is_out_of_bounds(&self, point: &Point) -> bool {
-        point.x > self.width || point.y > self.height || point.x < 0 || point.y < 0
-    }
-
     fn is_in_center(&self, point: &Point) -> bool {
         let center_width = self.width / 2;
         let center_height = self.height / 2;
@@ -94,20 +101,20 @@ impl Grid {
 
 #[derive(Clone)]
 struct Point {
-    x: i16,
-    y: i16,
+    x: i32,
+    y: i32,
 }
 
 impl Point {
-    fn add(&mut self, vector: &Vector) {
-        self.x = self.x + vector.x;
-        self.y = self.y + vector.y;
+    fn add(&mut self, vector: &Vector, scalar: i32) {
+        self.x = self.x + (vector.x * scalar);
+        self.y = self.y + (vector.y * scalar);
     }
 }
 
 struct Vector {
-    x: i16,
-    y: i16,
+    x: i32,
+    y: i32,
 }
 
 struct Bird {
@@ -116,7 +123,7 @@ struct Bird {
 }
 
 impl Bird {
-    fn new(speed_x: i16, speed_y: i16) -> Self {
+    fn new(speed_x: i32, speed_y: i32) -> Self {
         Self {
             position: Point { x: 0, y: 0 },
             speed: Vector {
@@ -126,9 +133,13 @@ impl Bird {
         }
     }
 
-    fn next_step(&mut self) -> Point {
+    fn next_steps(&mut self, scalar: i32) -> Point {
         let mut new = self.position.clone();
-        new.add(&self.speed);
+        new.add(&self.speed, scalar);
         new
+    }
+
+    fn reset(&mut self) {
+        self.position = Point { x: 0, y: 0 };
     }
 }
