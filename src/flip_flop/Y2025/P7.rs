@@ -312,10 +312,6 @@ impl Queue {
     fn contains(&self, path: &Path3D) -> bool {
         self.queued.contains_key(path)
     }
-
-    fn prune(&mut self, length: u64) {
-        self.queue.retain(|p| p.length <= length);
-    }
 }
 
 struct Grid3D {
@@ -350,9 +346,6 @@ impl Grid3D {
         queue.push(Path3D::new(self.start, 0), 1);
 
         while let Some((path, amount)) = queue.pop() {
-            if visited.contains(&path) {
-                continue;
-            }
             visited.insert(path);
 
             if path.point == self.end {
@@ -364,7 +357,6 @@ impl Grid3D {
                     }
                     None => {
                         length = Some(path.length);
-                        queue.prune(path.length);
                         paths += amount;
                     }
                 }
