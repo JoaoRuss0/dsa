@@ -6,4 +6,5 @@ pub fn execute() {
     crate::flip_flop::Y2025::P4::run();
     crate::flip_flop::Y2025::P5::run();
     crate::flip_flop::Y2025::P6::run();
+    crate::flip_flop::Y2025::P7::run();
 }
