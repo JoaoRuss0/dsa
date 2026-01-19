@@ -4,7 +4,7 @@ use std::collections::{HashMap, HashSet, VecDeque};
 use std::hash::{Hash, Hasher};
 
 pub fn run() {
-    println!("  ├─ Puzzle 6: Bird Spotters");
+    println!("  ├─ Puzzle 7: Hyper Grids");
 
     let path = "input/flip_flop/Y2025/P7.txt";
     let input = std::fs::read_to_string(path).unwrap();
