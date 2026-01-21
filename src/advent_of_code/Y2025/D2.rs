@@ -12,14 +12,29 @@ pub fn run() {
         .map(Range::from)
         .collect::<Vec<Range>>();
 
-    let a = ranges
+    let invalid = ranges
         .iter()
         .map(Range::compute_invalid)
         .flatten()
-        .collect::<Vec<usize>>();
+        .collect::<Vec<InvalidInRange>>();
 
-    println!("  │  ├─ Part 1: {}", a.iter().sum::<usize>());
-    //println!("  │  └─ Part 2: {}", );
+    println!(
+        "  │  ├─ Part 1: {}",
+        invalid
+            .iter()
+            .filter(|i| i.twice)
+            .map(|i| i.number)
+            .sum::<usize>()
+    );
+    println!(
+        "  │  └─ Part 2: {}",
+        invalid.iter().map(|i| i.number).sum::<usize>()
+    );
+}
+
+struct InvalidInRange {
+    twice: bool,
+    number: usize,
 }
 
 struct Range {
@@ -35,27 +50,44 @@ impl Range {
         Range { min, max }
     }
 
-    fn compute_invalid(&self) -> Vec<usize> {
+    fn compute_invalid(&self) -> Vec<InvalidInRange> {
         let mut invalid = Vec::new();
 
-        for i in (self.min..=self.max) {
-            let mut half_1 = i;
-            let mut half_2: usize = 0;
+        for n in (self.min..=self.max) {
+            let digit_count = (n.checked_ilog10().unwrap_or(0) + 1) as usize;
 
-            let digit_count = (i.checked_ilog10().unwrap_or(0) + 1) as usize;
-            if digit_count % 2 == 1 {
-                continue;
-            }
+            'chunking: for c in 2..=digit_count {
+                if digit_count % c != 0 {
+                    continue;
+                }
 
-            for i in 0..digit_count / 2 {
-                let digit = half_1 % 10;
-                let decimal_place = (10_usize.pow(i as u32)).max(1);
-                half_2 += digit * decimal_place;
-                half_1 /= 10;
-            }
+                let mut digits = n;
+                let mut first_chunk = None;
 
-            if half_1 == half_2 {
-                invalid.push(i);
+                for _ in 0..c {
+                    let mut chunk = 0;
+                    for j in 0..digit_count / c {
+                        let digit = digits % 10;
+                        let decimal_place = (10_usize.pow(j as u32)).max(1);
+                        chunk += digit * decimal_place;
+                        digits /= 10;
+                    }
+
+                    match first_chunk {
+                        Some(first_chunk) => match chunk != first_chunk {
+                            true => continue 'chunking,
+                            false => (),
+                        },
+                        None => first_chunk = Some(chunk),
+                    }
+                }
+
+                invalid.push(InvalidInRange {
+                    twice: c == 2,
+                    number: n,
+                });
+
+                break;
             }
         }
 
