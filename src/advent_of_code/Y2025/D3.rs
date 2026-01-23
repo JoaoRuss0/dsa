@@ -13,25 +13,48 @@ pub fn run() {
         })
         .collect::<Vec<Vec<u8>>>();
 
-    let mut joltage: u16 = 0;
-    for batteries in banks {
-        let mut one = 0;
-        let mut two = 1;
+    println!(
+        "  │  ├─ Part 1: {}",
+        banks
+            .iter()
+            .map(|b| calculate_max_joltage(b, 2))
+            .sum::<usize>()
+    );
+    println!(
+        "  │  └─ Part 2: {}",
+        banks
+            .iter()
+            .map(|b| { calculate_max_joltage(b, 12) })
+            .sum::<usize>()
+    );
+}
 
-        for i in 1..batteries.len() {
-            if batteries[i] > batteries[one] && i != batteries.len() - 1 {
-                one = i;
-                two = i + 1;
-                continue;
-            }
+fn calculate_max_joltage(bank: &Vec<u8>, quantity: usize) -> usize {
+    let battery_count = bank.len();
 
-            if batteries[i] > batteries[two] {
-                two = i;
-            }
-        }
-        joltage += batteries[one] as u16 * 10 + batteries[two] as u16;
+    let mut selected = vec![0; quantity];
+    for i in 0..quantity {
+        selected[i] = i;
     }
 
-    println!("  │  ├─ Part 1: {}", joltage);
-    //println!("  │  └─ Part 2: {}",);
+    for i in 1..=(bank.len() - quantity) {
+        for (j, &battery) in selected.iter().enumerate() {
+            let subset_start_index = i + j;
+            let subset_quantity = quantity - j;
+            let remaining = battery_count - i;
+
+            if bank[battery] < bank[subset_start_index] && remaining >= subset_quantity {
+                (j..quantity)
+                    .enumerate()
+                    .for_each(|(k, index)| selected[index] = subset_start_index + k);
+                break;
+            }
+        }
+    }
+
+    (0..quantity)
+        .rev()
+        .enumerate()
+        .map(|(i, bank_index)| bank[selected[bank_index]] as usize * 10_usize.pow(i as u32))
+        .sum()
 }
