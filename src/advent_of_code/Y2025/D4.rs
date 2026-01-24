@@ -6,10 +6,12 @@ pub fn run() {
     let path = "input/advent_of_code/Y2025/D4.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
-    let grid = Grid::from(input);
+    let mut grid = Grid::from(input);
 
-    println!("  │  ├─ Part 1: {}", grid.count_accessible_rolls());
-    //println!("  │  └─ Part 2: {}", );
+    let first_removal = grid.remove_accessible_rolls();
+
+    println!("  │  ├─ Part 1: {}", first_removal);
+    println!("  │  └─ Part 2: {}", first_removal + grid.clean());
 }
 
 struct Grid {
@@ -27,42 +29,63 @@ impl Grid {
         }
     }
 
-    fn count_accessible_rolls(&self) -> usize {
-        let mut accessible = 0;
+    fn clean(&mut self) -> usize {
+        let mut removed = None;
+        let mut last_removal = 0;
 
-        let count_adjacent_rolls = |from: &Point| -> usize {
-            let mut rolls = 0;
+        while removed.is_none() || last_removal > 0 {
+            last_removal = self.remove_accessible_rolls();
 
-            for &dir in Direction::ALL.iter() {
-                let vector = dir.into();
-                let to_check = from.apply(&vector);
-                if self.is_out_of_bounds(&to_check)
-                    || self.inner[to_check.x as usize][to_check.y as usize] != '@'
-                {
-                    continue;
-                }
-
-                rolls += 1;
-            }
-
-            rolls
-        };
-
-        for (x, row) in self.inner.iter().enumerate() {
-            for (y, &value) in row.iter().enumerate() {
-                if value != '@'
-                    || count_adjacent_rolls(&Point {
-                        x: x as i32,
-                        y: y as i32,
-                    }) >= 4
-                {
-                    continue;
-                }
-                accessible += 1;
+            match removed {
+                Some(r) => removed = Some(r + last_removal),
+                None => removed = Some(last_removal),
             }
         }
 
-        accessible
+        removed.unwrap()
+    }
+
+    fn remove_accessible_rolls(&mut self) -> usize {
+        let mut accessible = Vec::new();
+
+        for x in 0..self.width {
+            for y in 0..self.height {
+                if self.inner[x][y] != '@' {
+                    continue;
+                }
+                let search_at = Point {
+                    x: x as i32,
+                    y: y as i32,
+                };
+
+                if self.count_adjacent_rolls(&search_at) >= 4 {
+                    continue;
+                }
+                accessible.push(search_at);
+            }
+        }
+
+        for point in accessible.iter() {
+            self.inner[point.x as usize][point.y as usize] = '.';
+        }
+
+        accessible.len()
+    }
+
+    fn count_adjacent_rolls(&self, from: &Point) -> usize {
+        let mut rolls = 0;
+
+        for &dir in Direction::ALL.iter() {
+            let vector = dir.into();
+            let to_check = from.apply(&vector);
+            if self.is_out_of_bounds(&to_check)
+                || self.inner[to_check.x as usize][to_check.y as usize] != '@'
+            {
+                continue;
+            }
+            rolls += 1;
+        }
+        rolls
     }
 
     fn is_out_of_bounds(&self, point: &Point) -> bool {
