@@ -6,13 +6,17 @@ pub fn run() {
     let path = "input/advent_of_code/Y2025/D6.txt";
     let input = std::fs::read_to_string(path).unwrap();
 
-    let problems = parse_problem(input);
-
+    let mut problems = parse_problem(&input);
     println!(
         "  │  ├─ Part 1: {}",
         problems.iter().map(Problem::solve).sum::<usize>()
     );
-    //println!("  │  └─ Part 2: {}", );
+
+    problems = parse_problem_right_to_left(&input);
+    println!(
+        "  │  └─ Part 2: {}",
+        problems.iter().map(Problem::solve).sum::<usize>()
+    );
 }
 
 enum Operation {
@@ -44,7 +48,7 @@ impl Problem {
     }
 }
 
-fn parse_problem(input: String) -> Vec<Problem> {
+fn parse_problem(input: &String) -> Vec<Problem> {
     let lines = input.lines().collect::<Vec<&str>>();
     let mut problem_numbers = Vec::new();
 
@@ -67,6 +71,52 @@ fn parse_problem(input: String) -> Vec<Problem> {
             operation: Operation::from(operation.chars().next().unwrap()),
         })
     }
+
+    problems
+}
+
+fn parse_problem_right_to_left(input: &String) -> Vec<Problem> {
+    let lines = input.lines().collect::<Vec<&str>>();
+    let chars = lines
+        .iter()
+        .map(|l| l.chars().collect())
+        .collect::<Vec<Vec<char>>>();
+    let last_row = chars.iter().map(|l| l.len()).max().unwrap();
+
+    let mut problems = Vec::new();
+    let mut collected = Vec::new();
+
+    for col in (0..last_row).rev() {
+        let mut digits = Vec::new();
+        for row in 0..chars.len() - 1 {
+            if chars[row].len() <= col {
+                continue;
+            }
+
+            let char = chars[row][col];
+            if char == ' ' {
+                continue;
+            }
+            digits.push(char);
+        }
+
+        if digits.is_empty() {
+            problems.push(Problem {
+                numbers: collected.clone(),
+                operation: Operation::from(chars[chars.len() - 1][col + 1]),
+            });
+            collected.clear();
+            continue;
+        }
+
+        let number = digits.iter().collect::<String>().parse::<usize>().unwrap();
+        collected.push(number);
+    }
+
+    problems.push(Problem {
+        numbers: collected.clone(),
+        operation: Operation::from(chars[chars.len() - 1][0]),
+    });
 
     problems
 }
