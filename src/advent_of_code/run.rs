@@ -47,4 +47,5 @@ pub fn execute() {
     Y2025::D3::run();
     Y2025::D4::run();
     Y2025::D5::run();
+    Y2025::D6::run();
 }
