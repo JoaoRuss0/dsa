@@ -11,50 +11,44 @@ pub fn run() {
 
     let mut x_edges = BTreeMap::new();
     let mut y_edges = BTreeMap::new();
-    for pair in red_tiles.windows(2) {
-        let x_1 = pair[0].x;
-        let x_2 = pair[1].x;
-        let y_1 = pair[0].y;
-        let y_2 = pair[1].y;
+
+    let mut add_edge = |t1: &Point, t2: &Point| {
+        let x_1 = t1.x;
+        let x_2 = t2.x;
+        let y_1 = t1.y;
+        let y_2 = t2.y;
 
         match x_1 != x_2 {
             true => y_edges
-                .entry(pair[0].y)
+                .entry(t1.y)
                 .or_insert(Vec::new())
                 .push((x_1.min(x_2), x_1.max(x_2))),
             false => x_edges
-                .entry(pair[0].x)
+                .entry(t1.x)
                 .or_insert(Vec::new())
                 .push((y_1.min(y_2), y_1.max(y_2))),
         }
-    }
+    };
+    red_tiles
+        .windows(2)
+        .for_each(|pair| add_edge(&pair[0], &pair[1]));
+    add_edge(&red_tiles[red_tiles.len() - 1], &red_tiles[0]);
 
     let is_cut_by_any_edge =
         |edge: (u64, u64), at: u64, opposite_edges: &BTreeMap<u64, Vec<(u64, u64)>>| -> bool {
-            let mut cut = false;
+            if edge.0 + 1 >= edge.1 {
+                return false;
+            }
 
-            'outer: for i in edge.0..=edge.1 {
-                if let Some(edges) = opposite_edges.get(&i) {
-                    for &(s, e) in edges {
-                        match i == edge.0 || i == edge.1 {
-                            true => {
-                                if s < at && at < e {
-                                    cut = true;
-                                    break 'outer;
-                                }
-                            }
-                            false => {
-                                if s <= at && at <= e {
-                                    cut = true;
-                                    break 'outer;
-                                }
-                            }
-                        }
+            for (&i, edges) in opposite_edges.range(edge.0 + 1..edge.1) {
+                for &(s, e) in edges {
+                    if s <= at && at <= e {
+                        return true;
                     }
                 }
             }
 
-            cut
+            false
         };
 
     let mut max_area = 0;
@@ -67,14 +61,17 @@ pub fn run() {
             let x_edge = (t1.x.min(t2.x), t1.x.max(t2.x));
             let y_edge = (t1.y.min(t2.y), t1.y.max(t2.y));
 
-            if is_cut_by_any_edge(x_edge, t1.y, &x_edges)
+            if area <= max_bounded_area
+                || is_cut_by_any_edge(x_edge, t1.y, &x_edges)
                 || is_cut_by_any_edge(x_edge, t2.y, &x_edges)
                 || is_cut_by_any_edge(y_edge, t1.x, &y_edges)
                 || is_cut_by_any_edge(y_edge, t2.x, &y_edges)
             {
                 continue;
             }
-            max_bounded_area = max_bounded_area.max(area);
+
+            max_bounded_area = area;
+            println!("{t1} - {t2} = {area}");
         }
     }
 
