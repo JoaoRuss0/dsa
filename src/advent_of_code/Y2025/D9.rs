@@ -102,7 +102,6 @@ pub fn run() {
             }
 
             max_bounded_area = area;
-            println!("{t1} - {t2} = {area}");
         }
     }
 
