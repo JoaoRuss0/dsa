@@ -16,15 +16,20 @@ pub fn run() {
         })
         .collect::<HashMap<&str, Vec<&str>>>();
 
+    println!("  │  ├─ Part 1: {}", dfs("you", "out", &racks));
+    //println!("  │  └─ Part 2: {}", );
+}
+
+fn dfs(start: &str, end: &str, graph: &HashMap<&str, Vec<&str>>) -> usize {
     let mut queue = VecDeque::new();
-    queue.push_back("you");
+    queue.push_back(start);
 
     let mut paths = 0;
 
     while let Some(next) = queue.pop_front() {
-        match next == "out" {
+        match next == end {
             true => paths += 1,
-            false => racks
+            false => graph
                 .get(&next)
                 .unwrap()
                 .iter()
@@ -32,6 +37,5 @@ pub fn run() {
         }
     }
 
-    println!("  │  ├─ Part 1: {}", paths);
-    //println!("  │  └─ Part 2: {}", );
+    paths
 }
