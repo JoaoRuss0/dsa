@@ -19,7 +19,7 @@ pub fn run() {
         })
         .collect::<HashMap<String, Vec<String>>>();
 
-    println!("  │  ├─ Part 1: {}", dfs("you", "out", &racks));
+    println!("  │  ├─ Part 1: {}", dfs("svr", "out", &racks));
     //println!("  │  └─ Part 2: {}", );
 }
 
@@ -27,25 +27,26 @@ fn dfs(start: &str, end: &str, graph: &HashMap<String, Vec<String>>) -> u64 {
     let mut cache = HashMap::new();
 
     let mut stack = Vec::new();
-    stack.push((start.to_string(), false));
+    stack.push(((start.to_string(), start == "dac", start == "fft"), false));
 
-    while let Some((curr, expanded)) = stack.pop() {
-        if cache.contains_key(&curr) {
+    while let Some(((curr, dac, fft), expanded)) = stack.pop() {
+        if cache.contains_key(&(curr.clone(), dac, fft)) {
             continue;
         }
 
         if curr == end {
-            cache.insert(curr, 1);
+            cache.insert((curr, dac, fft), if dac && fft { 1 } else { 0 });
             continue;
         }
 
         match expanded {
             false => {
-                stack.push((curr.clone(), true));
+                stack.push(((curr.clone(), dac, fft), true));
                 if let Some(next) = graph.get(&curr) {
                     next.iter().for_each(|c| {
-                        if !cache.contains_key(c.as_str()) {
-                            stack.push((c.clone(), false));
+                        let key = (c.clone(), dac || c == "dac", fft || c == "fft");
+                        if !cache.contains_key(&key) {
+                            stack.push((key, false));
                         }
                     })
                 }
@@ -55,15 +56,17 @@ fn dfs(start: &str, end: &str, graph: &HashMap<String, Vec<String>>) -> u64 {
                     .get(&curr)
                     .map(|next| {
                         next.iter()
-                            .map(|c| cache.get(c.as_str()).copied().unwrap_or(0))
+                            .map(|c| {
+                                let key = (c.clone(), dac || c == "dac", fft || c == "fft");
+                                cache.get(&key).copied().unwrap_or(0)
+                            })
                             .sum::<u64>()
                     })
                     .unwrap_or(0);
-                cache.insert(curr, children_sum);
+                cache.insert((curr, dac, fft), children_sum);
             }
         }
     }
-    println!("{cache_hits}");
 
-    *cache.get(start).unwrap()
+    *cache.get(&(start.to_string(), false, false)).unwrap()
 }
