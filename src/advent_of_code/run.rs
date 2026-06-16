@@ -1,4 +1,4 @@
-use crate::advent_of_code::Y2025;
+use crate::advent_of_code::{Y2022};
 
 pub fn execute() {
     // println!("Year 2015");
@@ -27,8 +27,9 @@ pub fn execute() {
     // println!("Year 2021");
     // Y2021::D1::run();
 
-    // println!("Year 2022");
-    // Y2022::D1::run();
+    println!("Year 2022");
+    Y2022::D1::run();
+    Y2022::D2::run();
 
     // println!("Year 2023");
     // Y2023::D1::run();
@@ -41,16 +42,16 @@ pub fn execute() {
     // Y2024::D5::run();
     // Y2024::D6::run();
 
-    println!("Year 2025");
-    //Y2025::D1::run();
-    //Y2025::D2::run();
-    //Y2025::D3::run();
-    //Y2025::D4::run();
-    //Y2025::D5::run();
-    //Y2025::D6::run();
-    //Y2025::D7::run();
-    //Y2025::D8::run();
-    //Y2025::D9::run();
-    //Y2025::D10::run();
-    Y2025::D11::run();
+    // println!("Year 2025");
+    // Y2025::D1::run();
+    // Y2025::D2::run();
+    // Y2025::D3::run();
+    // Y2025::D4::run();
+    // Y2025::D5::run();
+    // Y2025::D6::run();
+    // Y2025::D7::run();
+    // Y2025::D8::run();
+    // Y2025::D9::run();
+    // Y2025::D10::run();
+    // Y2025::D11::run();
 }
