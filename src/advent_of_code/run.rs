@@ -30,6 +30,7 @@ pub fn execute() {
     println!("Year 2022");
     Y2022::D1::run();
     Y2022::D2::run();
+    Y2022::D3::run();
 
     // println!("Year 2023");
     // Y2023::D1::run();
